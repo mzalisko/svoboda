@@ -1413,18 +1413,20 @@ label.variant-row {
 	   (літачок по центру, розрив паперу біля лівого краю) на будь-якій ширині. */
 	.section--hero__plane {
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		position: relative;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: auto;
+		overflow: hidden; /* Запобігає появі горизонтального скролу через зсув картинки ліворуч */
 	}
 
 	.section--hero__plane-img {
 		position: relative;
-		width: 100%;
-		max-width: 420px;
+		width: calc(100% + 30px); /* Робить картинку трохи більшою, як у фігмі */
+		max-width: 480px;
+		margin-left: -50px; /* Зсуває картинку ліворуч на 50px */
 		height: auto;
 		display: block;
 		object-fit: contain;

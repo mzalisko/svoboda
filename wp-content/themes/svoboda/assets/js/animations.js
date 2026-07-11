@@ -836,11 +836,12 @@
 			var sx, sy;
 			if ( paper ) {
 				var pr = paper.getBoundingClientRect();
-				sx = pr.left + pr.width * 0.62 - flyRect.left;
-				sy = pr.top + pr.height * 0.40 - flyRect.top;
+				// Позиціонуємо виліт глибше з дірки розриву паперу
+				sx = pr.left + pr.width * 0.56 - flyRect.left;
+				sy = pr.top + pr.height * 0.43 - flyRect.top;
 			} else {
 				sx = -flyRect.width * 0.5;
-				sy = flyRect.height * 0.4;
+				sy = flyRect.height * 0.43;
 			}
 
 			var p1x = sx * 0.55, p1y = sy - flyRect.height * 0.9;
@@ -857,7 +858,8 @@
 				var dydt = 3 * mt * mt * ( p1y - sy ) + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( 0 - p2y );
 				var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
 				ang = Math.max( -14, Math.min( 14, ang ) ) * ( 1 - t * t * t );
-				var sc = 0.3 + 0.7 * ( t < 0.6 ? t / 0.6 : 1 );
+				// Починаємо з меншого масштабу (0.12 замість 0.3), створюючи ефект вильоту з глибини
+				var sc = 0.12 + 0.88 * t;
 				frames.push( {
 					transform: 'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + sc + ')',
 					opacity: t < 0.08 ? t / 0.08 : 1,
@@ -927,8 +929,8 @@
 
 			// Траєкторія відльоту літака: летить вгору-вправо, повністю залишаючись у Hero секції
 			// і зникаючи дуже швидко, щоб не перетинати нижчі секції (Order тощо)
-			var dx = vw * 0.45;
-			var dy = -vh * 0.12;
+			var dx = vw * 0.55;
+			var dy = -vh * 0.02;
 
 			var p1x = dx * 0.25, p1y = -vh * 0.16;
 			var p2x = dx * 0.70, p2y = dy - vh * 0.05;
