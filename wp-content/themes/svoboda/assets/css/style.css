@@ -690,7 +690,6 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 .section--order__cover img {
 	width: 100%;
 	height: auto;
-	mix-blend-mode: multiply;
 }
 
 /* Власна анімація появи книжки: підйом + м'яке "осідання" масштабу.
