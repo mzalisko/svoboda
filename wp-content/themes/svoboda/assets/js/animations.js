@@ -799,69 +799,194 @@
 	/* ------------------------------------------------------------------ */
 	/* 13. Hero: літак летить униз-уперед по скролу (десктоп, не reduced)   */
 	/* ------------------------------------------------------------------ */
-	function initHeroPlaneBurst() {
+	function initHeroPlaneAnimation() {
 		var fly   = document.querySelector( '[data-hero-fly]' );
 		var paper = document.querySelector( '.section--hero__paper' );
-		if ( ! fly || ! fly.animate ) {
+		var cover = document.querySelector( '.section--order__cover img' );
+		if ( ! fly ) {
 			return;
 		}
 
 		var desktopMq = window.matchMedia( '(min-width: 993px)' );
 		var reduceMq  = window.matchMedia( '(prefers-reduced-motion: reduce)' );
 
-		if ( ! desktopMq.matches || reduceMq.matches ) {
-			fly.classList.add( 'is-floating' );
-			return;
+		// Посадкове місце на обкладинці = зона стертого друкованого літака
+		// (виміряно з book-cover.png 1596x2240): x 478..1444, центр y 977.
+		var TARGET = { fx: 0.2995, fw: 0.6053, fyc: 0.4362 };
+		var SPRITE_RATIO = 1802 / 560;
+
+		var anim = null;
+		var ticking = false;
+
+		function easeInOut( t ) {
+			return t < 0.5 ? 2 * t * t : 1 - Math.pow( -2 * t + 2, 2 ) / 2;
 		}
 
-		// Старт -- гирло розриву (точка на шарі паперу), фініш -- layout-позиція
-		// спрайта (його місце в дизайні під тайтлом). Все в px відносно фактичних
-		// прямокутників, тому траєкторія коректна на будь-якій ширині канви.
-		var flyRect = fly.getBoundingClientRect();
-		var sx, sy;
-		if ( paper ) {
-			var pr = paper.getBoundingClientRect();
-			sx = pr.left + pr.width * 0.62 - flyRect.left;
-			sy = pr.top + pr.height * 0.40 - flyRect.top;
-		} else {
-			sx = -flyRect.width * 0.5;
-			sy = flyRect.height * 0.4;
-		}
+		// Запуск burst-in анімації при завантаженні (якщо ми на самому верху сторінки)
+		function startBurstAnimation() {
+			if ( ! fly.animate ) {
+				fly.classList.add( 'is-floating' );
+				return;
+			}
 
-		// Кубічна Безьє: з отвору вгору-вперед, з легким перельотом повз місце
-		// і поверненням -- "вилетів і став". Ніс за дотичною, гаситься до нуля.
-		var p1x = sx * 0.55, p1y = sy - flyRect.height * 0.9;
-		var p2x = flyRect.width * 0.06, p2y = -flyRect.height * 0.35;
+			// Очищуємо inline стилі на всяк випадок перед стартом
+			fly.style.transform = '';
 
-		var STEPS = 45;
-		var frames = [];
-		for ( var i = 0; i <= STEPS; i++ ) {
-			var t = i / STEPS;
-			var mt = 1 - t;
-			var bx = mt * mt * mt * sx + 3 * mt * mt * t * p1x + 3 * mt * t * t * p2x;
-			var by = mt * mt * mt * sy + 3 * mt * mt * t * p1y + 3 * mt * t * t * p2y;
-			var dxdt = 3 * mt * mt * ( p1x - sx ) + 6 * mt * t * ( p2x - p1x ) + 3 * t * t * ( 0 - p2x );
-			var dydt = 3 * mt * mt * ( p1y - sy ) + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( 0 - p2y );
-			var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
-			ang = Math.max( -14, Math.min( 14, ang ) ) * ( 1 - t * t * t );
-			var sc = 0.3 + 0.7 * ( t < 0.6 ? t / 0.6 : 1 );
-			frames.push( {
-				transform: 'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + sc + ')',
-				opacity: t < 0.08 ? t / 0.08 : 1,
-				easing: 'ease-out',
+			var flyRect = fly.getBoundingClientRect();
+			var sx, sy;
+			if ( paper ) {
+				var pr = paper.getBoundingClientRect();
+				sx = pr.left + pr.width * 0.62 - flyRect.left;
+				sy = pr.top + pr.height * 0.40 - flyRect.top;
+			} else {
+				sx = -flyRect.width * 0.5;
+				sy = flyRect.height * 0.4;
+			}
+
+			var p1x = sx * 0.55, p1y = sy - flyRect.height * 0.9;
+			var p2x = flyRect.width * 0.06, p2y = -flyRect.height * 0.35;
+
+			var STEPS = 45;
+			var frames = [];
+			for ( var i = 0; i <= STEPS; i++ ) {
+				var t = i / STEPS;
+				var mt = 1 - t;
+				var bx = mt * mt * mt * sx + 3 * mt * mt * t * p1x + 3 * mt * t * t * p2x;
+				var by = mt * mt * mt * sy + 3 * mt * mt * t * p1y + 3 * mt * t * t * p2y;
+				var dxdt = 3 * mt * mt * ( p1x - sx ) + 6 * mt * t * ( p2x - p1x ) + 3 * t * t * ( 0 - p2x );
+				var dydt = 3 * mt * mt * ( p1y - sy ) + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( 0 - p2y );
+				var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
+				ang = Math.max( -14, Math.min( 14, ang ) ) * ( 1 - t * t * t );
+				var sc = 0.3 + 0.7 * ( t < 0.6 ? t / 0.6 : 1 );
+				frames.push( {
+					transform: 'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + sc + ')',
+					opacity: t < 0.08 ? t / 0.08 : 1,
+					easing: 'ease-out',
+				} );
+			}
+
+			anim = fly.animate( frames, {
+				duration: 1500,
+				delay: 180,
+				fill: 'both',
+				easing: 'cubic-bezier(0.25, 0.7, 0.3, 1)',
 			} );
+
+			anim.onfinish = function () {
+				fly.classList.add( 'is-floating' );
+				anim = null;
+			};
 		}
 
-		var anim = fly.animate( frames, {
-			duration: 1500,
-			delay: 180,
-			fill: 'both',
-			easing: 'cubic-bezier(0.25, 0.7, 0.3, 1)',
-		} );
+		function update() {
+			ticking = false;
 
-		anim.onfinish = function () {
-			fly.classList.add( 'is-floating' );
-		};
+			if ( ! desktopMq.matches || reduceMq.matches ) {
+				fly.style.transform = '';
+				fly.classList.remove( 'is-floating' );
+				if ( anim ) {
+					anim.cancel();
+					anim = null;
+				}
+				return;
+			}
+
+			var scrollY = window.scrollY;
+
+			// Якщо користувач знаходиться на самому верху сторінки і анімація burst-in запущена чи очікується,
+			// ми даємо їй пріоритет.
+			if ( scrollY <= 5 ) {
+				if ( anim ) {
+					// анімація ще відтворюється
+					return;
+				}
+				// Якщо анімації немає, вмикаємо floating
+				fly.style.transform = '';
+				fly.classList.add( 'is-floating' );
+				return;
+			}
+
+			// Якщо користувач проскролив вниз більше ніж на 5px
+			if ( anim ) {
+				anim.cancel();
+				anim = null;
+			}
+			fly.classList.remove( 'is-floating' );
+
+			// Визначаємо baseline (layout-позицію) спрайта.
+			var prev = fly.style.transform;
+			fly.style.transform = '';
+			var base = fly.getBoundingClientRect();
+			fly.style.transform = prev;
+
+			var baseX = base.left + window.scrollX;
+			var baseY = base.top + window.scrollY;
+
+			if ( ! cover ) {
+				// Без обкладинки (секцію вимкнено) -- просто відлітає вниз-уперед.
+				var hero = document.getElementById( 'hero' );
+				var ph = Math.min( 1, scrollY / ( hero ? hero.offsetHeight : 1000 ) );
+				fly.style.transform = 'translate3d(' + ( ph * 36 ) + 'vw,' + ( ph * 80 ) + 'vh,0)';
+				return;
+			}
+
+			var cRect = cover.getBoundingClientRect();
+			var coverX = cRect.left + window.scrollX;
+			var coverY = cRect.top + window.scrollY;
+
+			// Ціль: спрайт шириною зони друкованого літака, центр по її центру.
+			var targetW = cRect.width * TARGET.fw;
+			var targetH = targetW / SPRITE_RATIO;
+			var targetX = coverX + cRect.width * TARGET.fx;
+			var targetY = coverY + cRect.height * TARGET.fyc - targetH / 2;
+
+			// Прогрес: 0 нагорі сторінки -> 1, коли центр обкладинки в центрі екрана.
+			var endScroll = ( coverY + cRect.height / 2 ) - window.innerHeight / 2;
+			var p = endScroll > 0 ? Math.min( 1, Math.max( 0, scrollY / endScroll ) ) : 0;
+			var e = easeInOut( p );
+
+			// Траєкторія -- кубічна Безьє (не пряма діагональ)
+			var dx = targetX - baseX;
+			var dy = targetY - baseY;
+			var vh = window.innerHeight;
+
+			var p1x = dx * 0.30, p1y = -vh * 0.16;
+			var p2x = dx * 0.72, p2y = dy + vh * 0.10;
+
+			var t = e, mt = 1 - t;
+			var bx = 3 * mt * mt * t * p1x + 3 * mt * t * t * p2x + t * t * t * dx;
+			var by = 3 * mt * mt * t * p1y + 3 * mt * t * t * p2y + t * t * t * dy;
+
+			// Ніс за дотичною кривої (банкування по курсу), з вирівнюванням
+			var dxdt = 3 * mt * mt * p1x + 6 * mt * t * ( p2x - p1x ) + 3 * t * t * ( dx - p2x );
+			var dydt = 3 * mt * mt * p1y + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( dy - p2y );
+			var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
+			ang = Math.max( -16, Math.min( 16, ang ) );
+			ang *= Math.min( 1, p * 6 ) * ( 1 - Math.pow( t, 3 ) );
+
+			var scale = 1 + ( targetW / base.width - 1 ) * e;
+
+			fly.style.transform =
+				'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + scale + ')';
+		}
+
+		// Запускаємо burst, якщо сторінка завантажена на початку
+		if ( window.scrollY <= 5 && desktopMq.matches && ! reduceMq.matches ) {
+			startBurstAnimation();
+		} else {
+			update();
+		}
+
+		window.addEventListener( 'scroll', function () {
+			if ( ! ticking ) {
+				ticking = true;
+				window.requestAnimationFrame( update );
+			}
+		}, { passive: true } );
+
+		window.addEventListener( 'resize', function () {
+			update();
+		} );
 	}
 
 	/* ------------------------------------------------------------------ */
@@ -881,7 +1006,7 @@
 		initOrderForm();
 		initOrderModal();
 		initCustomSelects();
-		initHeroPlaneBurst();
+		initHeroPlaneAnimation();
 	}
 
 	if ( 'loading' === document.readyState ) {
