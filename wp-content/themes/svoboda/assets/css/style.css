@@ -1425,7 +1425,7 @@ label.variant-row {
 	.section--hero__plane-img {
 		position: relative;
 		width: calc(100% + 30px); /* Робить картинку трохи більшою, як у фігмі */
-		max-width: 480px;
+		max-width: 520px;
 		margin-left: -50px; /* Зсуває картинку ліворуч на 50px */
 		height: auto;
 		display: block;
