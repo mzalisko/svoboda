@@ -483,6 +483,11 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	will-change: transform;
 	/* Розрахунок посадки (initHeroPlaneFly) веде лівий-верхній кут. */
 	transform-origin: 0 0;
+	opacity: 0; /* Приховуємо літак до старту анімації вильоту, щоб уникнути стрибка */
+}
+
+.section--hero__fly.is-floating {
+	opacity: 1;
 }
 
 .section--hero__fly img {
@@ -1407,13 +1412,22 @@ label.variant-row {
 	   ("375 Fill x 209"); object-position center дає стабільний однаковий кадр
 	   (літачок по центру, розрив паперу біля лівого краю) на будь-якій ширині. */
 	.section--hero__plane {
-		display: block;
+		display: flex;
+		justify-content: center;
 		position: relative;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: auto;
-		aspect-ratio: 2552 / 2466;
+	}
+
+	.section--hero__plane-img {
+		position: relative;
+		width: 100%;
+		max-width: 420px;
+		height: auto;
+		display: block;
+		object-fit: contain;
 	}
 
 	/* Шаровий десктопний варіант (папір + політ) на мобільному вимкнено. */
