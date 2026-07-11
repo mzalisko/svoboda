@@ -1,0 +1,12 @@
+/*
+Theme Name: Свобода
+Theme URI: https://example.com
+Author: MeWeek
+Description: Кастомна тема-лендинг для книги "Свобода". Без фреймворків, чистий HTML/CSS/PHP за Template Hierarchy WordPress.
+Version: 0.1.0
+Requires PHP: 8.0
+Text Domain: svoboda
+*/
+
+/* Реальні стилі підключаються окремим файлом assets/css/style.css через wp_enqueue_style(),
+   щоб не змішувати metadata-заголовок теми з actual CSS (легше кешувати/версіонувати). */

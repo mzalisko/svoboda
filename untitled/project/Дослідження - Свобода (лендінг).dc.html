@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  @font-face { font-family: dummy; src: local(Arial); }
+  body { margin: 0; }
+  ::selection { background: rgba(240,18,18,0.25); }
+</style>
+</helmet>
+<div style="font-family: Georgia, 'Times New Roman', serif; background: oklch(0.98 0.004 80); color: oklch(0.22 0.01 60); max-width: 980px; margin: 0 auto; padding: 64px 56px 120px; line-height: 1.55;">
+
+  <div style="font-family: Manrope, -apple-system, sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(240,18,18); margin-bottom: 12px;">Дослідження Figma-файлу · матеріали для відтворення</div>
+  <h1 style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 56px; margin: 0 0 8px; letter-spacing: 0.01em;">«Свобода» — лендінг книги</h1>
+  <p style="font-size: 18px; color: oklch(0.4 0.01 60); margin: 0 0 40px;">Повний технічний розбір макета для точного відтворення вигляду, розмірів, відступів і анімацій.</p>
+
+  <div style="background: white; border: 1px solid oklch(0.9 0.005 60); border-radius: 4px; padding: 24px 28px; margin-bottom: 48px; font-family: Manrope, sans-serif; font-size: 15px;">
+    <b>Що це:</b> односторінковий promo-сайт (landing page) для книги «Свобода» автора Ігоря Браславця — блоки: hero, замовлення книги, про автора, «для кого ця книга», відео-презентація, цитата, трансформація (roadmap), лід-магніт (email), для власників бізнесу, відгуки, повторний CTA.<br><br>
+    <b>Джерело правди:</b> <code>Page-1 → Desktop - 4</code> (вузол 180:62, 1920×12818) — фінальна десктопна версія, і <code>Page-1 → mobile</code> — фінальна мобільна версія. <code>Desktop - 5</code> — майже ідентичний дубль (варіант/бекап, різниця лише в 1–2 картках відгуків — Frame164 замість Frame160). <b>Page-2 і Page-3 — це чорнові ранні ітерації</b> того ж лендінгу (інша палітра rgb(242,247,253), інший шрифт Manrope, інша структура) — вони НЕ фінальний дизайн, ігноруйте їх для відтворення; лишені тут для довідки про еволюцію макету.
+  </div>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px; margin-top: 56px;">1. Полотно і сітка</h2>
+  <ul style="font-family: Manrope, sans-serif; font-size: 15px;">
+    <li>Desktop canvas: <b>1920 × 12818px</b>, overflow hidden, фон <code>#FFFFFF</code>.</li>
+    <li>Контент-контейнер більшості секцій: горизонтальний padding <b>160px</b> з кожного боку (content width ≈ 1600px), за винятком hero (абсолютне позиціонування).</li>
+    <li>Header: висота area 34px, top 26px, side margin 41px (ширина 1839px), flex row, justify space-between, по центру логотип «Свобода» (Times New Roman 30px).</li>
+    <li>Mobile canvas: окремий артборд у <code>/Page-1/mobile</code>, той самий контент вертикально стековано, single-column.</li>
+  </ul>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px;">2. Кольори</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; font-family: Manrope, sans-serif; font-size: 13px; margin-bottom: 16px;">
+    <sc-for list="{{ colors }}" as="c" hint-placeholder-count="10">
+      <div style="display: flex; align-items: center; gap: 10px; background: white; border: 1px solid oklch(0.92 0.005 60); border-radius: 4px; padding: 8px 10px;">
+        <div style="width: 28px; height: 28px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; background: {{ c.hex }};"></div>
+        <div>
+          <div style="font-weight: 700;">{{ c.hex }}</div>
+          <div style="opacity: 0.6;">{{ c.role }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <p style="font-family: Manrope, sans-serif; font-size: 14px; color: oklch(0.4 0.01 60);">Акцент — <b>rgba(240,18,18,0.9)</b> "книжковий червоний" (обводки кнопок/цін/іконок, заголовки на світлих і темних фонах). Фонові смуги секцій чергуються: <b>#FFFFFF</b> ↔ <b>#F5F5F5</b>. Текст: чорний rgb(0,0,0) для цитат Cormorant, rgb(26,26,26)/rgb(50,50,50) для заголовків Times New Roman, rgb(96,96,96) другорядний.</p>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px;">3. Типографіка</h2>
+  <div style="font-family: Manrope, sans-serif; font-size: 15px;">
+    <p><b>Cormorant Garamond SemiBold (600)</b> — усі великі заголовки секцій (H1 hero «Свобода» 134.8px; H2 секцій «Про автора», «Ця книга для вас, якщо ви відчуваєте:», «Ви отримаєте трансформацію:», «Для власників бізнесу», «Відгуки» — всі 100px, line-height 1, letter-spacing 0.02em). Курсивна цитата "Свідомість не відображає реальність" — 52px, той самий шрифт.</p>
+    <p><b>Times New Roman</b> — весь UI-текст і body-копірайт: nav-пункти (20px regular), логотип (30px regular), підзаголовок hero (45.35px regular), ціни/кнопки/лейбли карток (20–36px, regular/bold), номери "01/02/03" (73px bold italic).</p>
+    <p><b>Cormorant (не Garamond) Regular/Medium/SemiBold/Bold</b> — довгі описові абзаци і буліт-списки: цитата hero (30px semibold italic), опис автора (22px), пункти "Ця книга для вас" (20px, іконка-діамант + текст), картки трансформації (16–20px), підписи слайдера відгуків.</p>
+    <p><b>Manrope</b> — з'являється лише у чорнових Page-2/Page-3, у фінальному Page-1 не використовується.</p>
+  </div>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px;">4. Секції зверху вниз (Desktop-4, координати абсолютні від top канвасу)</h2>
+  <sc-for list="{{ sections }}" as="s" hint-placeholder-count="10">
+    <div style="background: white; border: 1px solid oklch(0.9 0.005 60); border-radius: 4px; margin: 14px 0; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; background: oklch(0.96 0.005 60); padding: 10px 18px; font-family: Manrope, sans-serif;">
+        <b style="font-size: 15px;">{{ s.name }}</b>
+        <span style="font-size: 12px; opacity: 0.6; font-variant-numeric: tabular-nums;">top {{ s.top }} · h {{ s.h }} · bg {{ s.bg }}</span>
+      </div>
+      <div style="padding: 12px 18px; font-family: Manrope, sans-serif; font-size: 14px; white-space: pre-line;">{{ s.detail }}</div>
+    </div>
+  </sc-for>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px; margin-top: 56px;">5. Компоненти, що повторюються</h2>
+  <sc-for list="{{ components }}" as="c" hint-placeholder-count="6">
+    <div style="margin: 16px 0;">
+      <b style="font-family: Manrope, sans-serif; font-size: 15px;">{{ c.name }}</b>
+      <pre style="background: #1a1a1a; color: #eee; font-size: 12.5px; padding: 14px 16px; border-radius: 4px; overflow-x: auto; font-family: 'SF Mono', Consolas, monospace; margin-top: 6px; white-space: pre-wrap;">{{ c.code }}</pre>
+    </div>
+  </sc-for>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px;">6. Зображення й іконки — маніфест</h2>
+  <p style="font-family: Manrope, sans-serif; font-size: 14px; color: oklch(0.4 0.01 60);">Всі файли нижче вже скопійовані у папку проєкту <code>assets/</code> (поруч із цим документом) з людськими іменами — просто заберіть цю папку разом з документом.</p>
+  <div style="overflow-x: auto;">
+  <table style="width: 100%; border-collapse: collapse; font-family: Manrope, sans-serif; font-size: 13.5px;">
+    <thead><tr style="text-align: left; border-bottom: 2px solid oklch(0.85 0.005 60);"><th style="padding: 8px;">Hash</th><th style="padding: 8px;">Де використано</th><th style="padding: 8px;">Розмір</th></tr></thead>
+    <tbody>
+    <sc-for list="{{ images }}" as="im" hint-placeholder-count="12">
+      <tr style="border-bottom: 1px solid oklch(0.93 0.005 60);">
+        <td style="padding: 8px; font-family: monospace;">{{ im.hash }}</td>
+        <td style="padding: 8px;">{{ im.usage }}</td>
+        <td style="padding: 8px;">{{ im.size }}</td>
+      </tr>
+    </sc-for>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px; margin-top: 40px;">7. Декоративні SVG-лінії ("рука пише")</h2>
+  <p style="font-family: Manrope, sans-serif; font-size: 15px;">
+    Тонкі криві сполучні лінії (сірі, <code>rgb(103,103,103)</code> / <code>rgba(96,96,96,0.36)</code>, ~1–4px stroke) — це не декор "з коробки", а власні кастомні SVG-path'и: <code>Vector-11.svg</code> (вертикальна хвиляста лінія біля "Про автора"), <code>Vector-11-2/3.svg</code> (велика хвиля навколо H2 "Ця книга для вас"), нова хвиляста траса в блоці "Ви отримаєте трансформацію" (карти зигзагом), товста хвиляста лінія <code>Vector-11-3.svg</code> вздовж всього блоку "Для власників бізнесу"/"Відгуки" (369×1834). Скопіювати ці SVG 1-в-1 з фіга (не перевинаходити геометрію) — вони містять точні криві Безьє даного макету.
+  </p>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px;">8. Анімації</h2>
+  <p style="font-family: Manrope, sans-serif; font-size: 15px;">
+    У файлі є <b>148 KEYFRAME + 66 KEYFRAME_TRACK + 28 ANIMATION_PRESET_INSTANCE</b> вузлів на рівні файлу (Figma Smart-Animate/Video preset), але вони НЕ резолвляться в JSX-експорті (це property nodes, не layout) — конкретні easing/duration не читаються цим інструментарієм. Що можна вивести зі структури й типового патерну для такого лендінгу:
+  </p>
+  <ul style="font-family: Manrope, sans-serif; font-size: 15px;">
+    <li><b>Desktop-4 vs Desktop-5</b> — два майже ідентичні кадри з мінімальною різницею в блоці відгуків → найімовірніше це before/after стан Smart Animate прототипу (кнопка/картка змінюється при кліку/hover), а не окрема сторінка.</li>
+    <li><b>Хвилясті лінії-з'єднувачі</b> — типовий патерн "draw-on-scroll" (stroke-dashoffset reveal синхронно зі скролом) — рекомендовано відтворити як scroll-triggered SVG path draw, а не статичний штрих.</li>
+    <li><b>Кругла плашка "ОТРИМАТИ"</b> (email-форма у колі) і paper-plane SVG поруч — типово анімуються появою/легким рухом (float) при в'їзді в viewport.</li>
+    <li>Рекомендація агенту-виконавцю: якщо потрібна точна крива анімації — відкрити оригінал у Figma (Smart Animate) вручну; цей інструментарій дає лише структуру, не timing.</li>
+  </ul>
+
+  <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; border-bottom: 2px solid rgb(240,18,18); padding-bottom: 8px;">9. Мобільна версія</h2>
+  <p style="font-family: Manrope, sans-serif; font-size: 15px;">Той самий контент, порядок секцій ідентичний, одноколонковий стек (див. знімок нижче). Кнопки/картки на всю ширину, hero-текст по центру, header складається в гамбургер-меню (іконка списку зверху). Розміри шрифтів пропорційно зменшені — читати точні значення з <code>/Page-1/mobile/index.jsx</code> per-елемент (структура identична Desktop, лише px інші).</p>
+
+  <div style="margin-top: 56px; padding: 20px 24px; background: rgb(26,26,26); color: white; border-radius: 4px; font-family: Manrope, sans-serif; font-size: 14px;">
+    <b>Для агента-виконавця:</b> всі точні значення (gap/padding/colors/font-size/border-radius) в розділах 4–5 — дослівні транскрипції з .fig, не округлювати до сітки 4/8px. Зображення копіювати з <code>/Page-1/Desktop---4/assets/</code> (desktop) та відповідної <code>/mobile/assets/</code> (mobile) — самі файли бінарно ідентичні між кадрами. SVG-обводки (Vector*.svg) копіювати як є.
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const colors = [
+      { hex: '#FFFFFF', role: 'фон, картки, текст на темному' },
+      { hex: 'rgba(240,18,18,0.9)', role: 'акцент — червоний (CTA, ціни, обводки)' },
+      { hex: '#F5F5F5', role: 'фон секцій (чергується з білим)' },
+      { hex: '#1A1A1A', role: 'темний фон / текст' },
+      { hex: '#000000', role: 'текст цитат Cormorant' },
+      { hex: 'rgb(50,50,50)', role: 'заголовки Times New Roman' },
+      { hex: 'rgb(26,26,26)', role: 'заголовки картинок-карток' },
+      { hex: 'rgb(96,96,96)', role: 'другорядний текст, іконки' },
+      { hex: 'rgb(255,216,118)', role: 'акцент-золото (текст, рідко)' },
+      { hex: 'rgb(241,41,41)', role: 'обводки декоративних SVG-стрілок' },
+      { hex: 'rgb(255,56,60)', role: 'кнопка "Презентація" (заливка)' },
+      { hex: 'rgb(230,223,223)', role: 'текст на фото (ім\'я автора)' },
+    ];
+
+    const sections = [
+      { name: 'Header (nav) — точні координати', top: 26, h: 34, bg: 'прозорий, поверх hero-фото (position: absolute, не sticky в макеті)', detail: 'Контейнер: position absolute, left 41, top 26, width 1839, height 34. display:flex, flexDirection:row, justifyContent:space-between, alignItems:center. (Тобто по всій ширині 1920 — side margin 41px з обох боків: 1920-2×41=1838≈1839.)\n\n① ЛІВА ГРУПА (3 пункти) — width 619.783, height 28, flex row, gap 40.311px, alignItems:center:\n  • "Про книгу" — font "Times New Roman" regular 24px, color rgba(240,18,18,0.9) [ЧЕРВОНИЙ]\n  • "Що всередені" — те саме: 24px, color rgba(240,18,18,0.9) [ЧЕРВОНИЙ]\n  • "Про автора" — те саме: 24px, color rgba(240,18,18,0.9) [ЧЕРВОНИЙ]\n  (усі 3 пункти лівої групи мають ЧЕРВОНИЙ колір — це компонент Item, колір захардкожений у самому компоненті, не залежить від тексту)\n\n② ЦЕНТР (логотип) — width 142, height 34, flex row, gap 5, justifyContent:center, alignItems:center:\n  • "Свобода" — font "Times New Roman" regular 30px, whiteSpace nowrap, lineHeight 100%, color rgb(49,49,49) [ТЕМНО-СІРИЙ, НЕ червоний]\n\n③ ПРАВА ГРУПА (3 пункти) — width 350.622, height 28, flex row, gap 40.311px, alignItems:center:\n  • "Для кого" — font "Times New Roman" regular 24px, color rgb(49,49,49) [ТЕМНО-СІРИЙ]\n  • "Відгуки" — те саме: 24px, color rgb(49,49,49) [ТЕМНО-СІРИЙ]\n  • "Замовити" — те саме: 24px, color rgb(49,49,49) [ТЕМНО-СІРИЙ]\n  (усі 3 пункти правої групи ТЕМНО-СІРІ — компонент Item2)\n\nВАЖЛИВО: ліва група контрастна (червона), права — нейтральна (сіра), логотип по центру теж сірий. Це навмисний акцент — ліва група читається як "головні" пункти.' },
+      { name: 'Hero — точні координати', top: 0, h: 1138, bg: '#FFFFFF', detail: 'Секція = верхні 1138px канвасу (0…1138), фон білий, overflow hidden на рівні всього canvas.\n\n① ФОНОВЕ ФОТО АВТОРА (hero-author-cutout.png): position absolute, left 1, top -27 (виходить трохи за верх канвасу), width 1328, height 1128. CSS: background: url(hero-author-cutout.png) 570.938% 0% / 100.525% 114.338% no-repeat — це специфічний кроп: вихідний файл значно більший за 1328×1128 і зміщений на 570.9% вправо, показуючи лише фрагмент (силует автора зліва). Простіше: відкрити файл, візуально підібрати такий самий кроп/масштаб через object-position, або заздалегідь обрізати джерело до потрібного кадру розміром 1328×1128 перед вставкою — ТОЧНІ проценти давати object-fit неможливо напряму в img, тому найнадійніше — растеризувати кроп у Figma/фоторедакторі один раз і вставити вже обрізаний PNG 1328×1128.\n\n② ЗАГОЛОВНИЙ БЛОК (текст): position absolute, left 95, top 148, width 818, height 256.233. display:flex, flexDirection:column, gap 30.233, alignItems:flex-start.\n  • Рядок 1 — "Свобода": font-family "Cormorant Garamond", weight 600, font-size 134.79px, textAlign right, whiteSpace nowrap, lineHeight 125.972px (тобто НЕ множник — фіксовані 125.972px, менше за font-size), letterSpacing 0.02em, color rgba(240,18,18,0.9).\n  • Рядок 2 — "Шлях за межі реального.  Шлях на грані можливого." (подвійний пробіл між реченнями — з макету): font-family "Times New Roman", weight 400, font-size 45.35px, alignSelf stretch (тобто width 818, переноситься на 2 рядки природньо), lineHeight ×1.1, letterSpacing 0.02em, color rgb(49,49,49).\n\n③ ЦИТАТА (праворуч, над плечем на фото): position absolute, left 1184.711, top 740.301, width 561.836, height 168. font-family Cormorant, weight 600, fontStyle italic, font-size 30px, textAlign center, lineHeight ×1.4, color rgba(0,0,0,0.8). Текст (з переносом рядка по джерелу):\n"Ми не просто бачимо як події відбуваються з нами. Ми їх створюємо. Своїм внутрішнім станом, думками, вірою." / нового рядка / "Ви дізнаєтеся як підкорити реальність."\n\n④ ІКОНКА-ЛАПКА над цитатою: <img src="icon-quote-left.svg">, position absolute, left 1055, top 724, width 124.229, height 89, boxShadow: inset 0 0 0 2.078px rgba(240,18,18,0.9), 0 0 0 2.078px rgba(240,18,18,0.9) (подвійна тінь = і внутрішня, і зовнішня обводка контуру гліфа товщиною 2.078px), color rgba(240,18,18,0.9) (glyph fill масковано кольором через currentColor/mask).\n\nПОРЯДОК ШАРІВ (z-index знизу вгору, як у файлі): фото автора → заголовний блок → цитата+іконка → header (він рендериться найостаннім у DOM-порядку і лежить абсолютно поверх фото).' },
+      { name: 'Замовити книгу (перший блок)', top: 1138, h: 1137, bg: '#F5F5F5', detail: 'Flex row, gap 90, center. Ліворуч: колонка (gap 79) — заголовок "Замовити книгу" 36px bold Times New Roman, під ним 2 pill-картки (gap 30.23, border-radius 57.95, обводка 1.26px rgba(240,18,18,.9), padding 24×30): "Паперова ₴450" / "Електронна ₴290" (ціна 24px bold red). Нижче — рядок "Тираж обмежений" (іконка 30×30 + текст 20.16px rgb(96,96,96), gap 15.1).\nПраворуч: фото книги 658×969, mix-blend multiply.' },
+      { name: 'Про автора', top: 2275, h: 1186, bg: '#FFFFFF (в структурі йде одразу після, height ~1137 блок автора)', detail: 'H2 "Про автора" Cormorant Garamond 100px @ ліворуч, поруч (gap 101) колонка тексту 862px: bold 22px Cormorant intro + regular 22px опис (обидва color #000, line-height 1.4). Вертикальна хвиляста лінія Vector-11.svg (rotated 90°, box 862×0→113) як розділювач.\nНижче — фото автора на пляжі 740×823 з 2 вертикальними тонкими білими лініями-рамками (1px rgba(255,255,255,.19)) @ x=62 і x=504, і накладеним текстом: ім\'я "Ігор Браславець" 39px bold Cormorant color rgb(230,223,223), підпис "Ветеран. Радник власників бізнесу. Автор." 20px semibold, @ left 74.5 top 374, gap 30; instagram-хендл "@braslavetsigor" 20px underline color rgb(188,171,171) @ left 521.5 top 612.' },
+      { name: 'Ця книга для вас, якщо ви відчуваєте', top: 3413, h: 1186, bg: '#F5F5F5', detail: 'H2 100px Cormorant Garamond color rgba(240,18,18,.9) @ left 160 top 160, поруч велика хвиляста лінія Vector-11-2.svg (398.99×801.9, rotated).\n3 фото-картки 326×222 rounded (Image64 ×3) розкидані по секції.\nЛіва колонка списку (left 160 top 708, w 831): 6 пунктів Frame155 — кожен: діамант-іконка 16×16 (2 накладені: ромб з обводкою 0.76px + коло з обводкою) + текст Cormorant 500 20px lh 1.4, gap 20 (icon-text), gap 30 між пунктами (flex column).\nПрава колонка (left 992 top 824, w 768): 4 пункти Frame160, та сама структура але текст Cormorant 700 (bold), gap 30.' },
+      { name: 'Відео-презентація автора', top: 5141, h: 826, bg: '#FFFFFF', detail: 'Full-width відео-прев\'ю картинка 1597×826 (frame w168 top5141). Play-button: коло 114×114 rgba(240,18,18,.8) + трикутник play білий 52.5×52.5 по центру @ (735,403) відносно контейнера.\nНижня плашка інфо 1597×83 напівпрозора rgba(74,74,74,.38): "Ігор Браславець · 2ХВ" 20px bold/regular white, @ left 671 top 30.' },
+      { name: 'Велика цитата з лапками', top: 6060, h: 417, bg: '#FFFFFF', detail: 'Ліва велика лапка icon-2.svg 119×86 з обводкою 2.6px red @ left216 top124.\nЦитата "Свідомість не відображає реальність. Вона її створює." Cormorant Garamond 600 52px lh1.4 letterSpacing .02em color rgb(50,50,50) @ w861.\nДекоративне подвійне фото-плями (image 69/68, той самий hash, 2 кропи, mix-blend multiply) 419×406 праворуч зверху цитати.' },
+      { name: 'Ви отримаєте трансформацію', top: 6696, h: 1658, bg: '#F5F5F5', detail: 'H2 100px Cormorant Garamond centered color rgb(50,50,50) @ left472 top160 (w977).\n3× Frame66 (заголовок 24px bold Times + опис 22px regular Times, gap16, w400) + 3× Frame63 (та сама структура, друга частина списку) — розкидані по хвилястій траєкторії (S-подібний шлях, задають ілюзію "roadmap"), лінія-з\'єднувач намальована окремим SVG (не в цій пачці — див Frame175 ×6 = крапки-вузли на траєкторії).\nВелика товста хвиляста лінія Vector-11-3.svg (369×1834, обводка 4px rgba(96,96,96,.36)) йде наскрізь через цю і наступну секцію.\nКругла плашка "ОТРИМАТИ" (лід-магніт, safe email) — коло 732×732, чорна обводка 8.5px, фон-фото (kolo/ball.svg), всередині: "Безкоштовний уривок" 24px bold Times letterSpacing .16em white + pill-інпут email 562×71 (bg rgba(255,255,255,.2), radius 57.95) + кнопка "ОТРИМАТИ" 263×63 (bg rgba(255,255,255,.9), text red 20px letterSpacing .18em) @ absolute left629 top8641.\nПаперовий літачок SVG (мультиплай-фото) 159×159 @ left919 top8432, поруч з колом.' },
+      { name: 'Для власників бізнесу', top: 9532, h: 1262, bg: '#F5F5F5', detail: 'H2 "Для власників бізнесу" Cormorant Garamond 100px w1098 (Item3 ×3 = різні варіанти тексту-заголовку/підзаголовку) @ left160 top527 в колонці gap70 з підписом-фото 707×631 праворуч.\n3× Frame187 (номер "01/02/03" italic bold 73px + вертикальна червона паличка 15×67.8 + опис 24px bold Times w639, gap 25) — це "01 Власник як операційна система…", "02 Команда — дзеркало…", "03 Пряма співпраця…", gap 50 між пунктами (352h контейнер).\nБіла pill-плашка CTA 789×97 radius54: текст "Стратегічний архітектор для бізнесу" bold20 Times + Vector-13.svg (стрілка 43×27, обводка 0.6px rgb(241,41,41)) + кнопка "Презентація" (bg rgb(255,56,60), radius79, padding20×24, текст white 20px letterSpacing .18em).' },
+      { name: 'Відгуки', top: 10954, h: 827, bg: '#FFFFFF', detail: 'Заголовок-рядок (w1164 h110): стрілка вліво Vector-13-2.svg 110.5×67.5 (обводка 1.5px red) — H2 "Відгуки" 100px Cormorant Garamond центр — стрілка вправо (той самий SVG, дзеркально scaleX(-1)).\n3 крапки-індикатори (Rectangle50 ×3, gap45) @ left508 top143.\n3× Image70 картки-відгуки 348×606.5 (темні фото-картки з текстом поверх, gap60, flex row) @ top220.' },
+      { name: 'Фінальний CTA / Замовити книгу (повтор)', top: 11977, h: 841, bg: 'фото на всю ширину 1920×841 + затемнення rgba(0,0,0,.12)', detail: 'Той самий блок "Замовити книгу" що й вгорі (колонка gap79, 2 pill-картки цін, "Тираж обмежений"), але кольори інвертовані під темне фото: текст білий/напівпрозорий (rgba(255,255,255,.8/.9)), той самий розмір 685.7×304.4 @ left617 top12362.' },
+    ];
+
+    const components = [
+      { name: 'Item / Item2 — пункт навігації', code: `<span style={{fontFamily:'"Times New Roman"', fontWeight:400, fontSize:20, color:'rgb(49,49,49)'}}>{label}</span>\n// gap між пунктами: 40.311px, flex row align-center` },
+      { name: 'Frame155 / Frame160 — пункт списку "Ця книга для вас"', code: `<div style={{display:'flex',flexDirection:'row',gap:20,alignItems:'baseline'}}>\n  <IconDiamond size={16} stroke="rgba(240,18,18,.9)" strokeWidth={0.76}/>\n  <span style={{fontFamily:'Cormorant', fontWeight:500 /*160=700 bold*/, fontSize:20, lineHeight:1.4, color:'#000'}}>{text}</span>\n</div>\n// контейнер-список: gap 30 (vertical), width 831` },
+      { name: 'Image64 — квадратна фото-картка (round rect)', code: `<div style={{width:326,height:222, background:'url(...) center/cover', borderRadius: 8 /*перевірити exact в screenshot*/ }} />` },
+      { name: 'Image70 — картка відгуку', code: `<div style={{width:348,height:606.5, background:'url(...) center/cover'}} />` },
+      { name: 'Frame66 / Frame63 — картка трансформації', code: `<div style={{display:'flex',flexDirection:'column',gap:16,width:400}}>\n  <span style={{fontFamily:'"Times New Roman"',fontWeight:700,fontSize:24,color:'rgb(26,26,26)'}}>{title}</span>\n  <span style={{fontFamily:'"Times New Roman"',fontWeight:400,fontSize:22,color:'rgb(26,26,26)'}}>{desc}</span>\n</div>` },
+      { name: 'Frame187 — пункт "для власників бізнесу"', code: `<div style={{display:'flex',gap:25,alignItems:'center'}}>\n  <span style={{fontFamily:'"Times New Roman"',fontWeight:700,fontStyle:'italic',fontSize:73}}>{num}</span>\n  <svg width={15} height={67.8} style={{background:'rgb(241,41,41)'}}/> {/* тонка паличка-риска */}\n  <span style={{fontFamily:'"Times New Roman"',fontWeight:700,fontSize:24,width:639,color:'rgb(26,26,26)'}}>{desc}</span>\n</div>` },
+      { name: 'Item3 — заголовок секції', code: `<span style={{fontFamily:"'Cormorant Garamond'",fontWeight:600,fontSize:100,lineHeight:1,letterSpacing:'0.02em',color:'rgb(50,50,50)'}}>{title}</span>` },
+      { name: 'Pill price-card ("Паперова ₴450")', code: `<div style={{borderRadius:57.95, boxShadow:'inset 0 0 0 1.26px rgba(240,18,18,.9), 0 0 0 1.26px rgba(240,18,18,.9)', display:'flex', padding:'24px 30px', justifyContent:'space-between', alignItems:'center', gap:12}}>\n  <Icon/> <span style={{fontFamily:'"Times New Roman"',fontSize:20}}>{label}</span>\n  <span style={{fontFamily:'"Times New Roman"',fontWeight:700,fontSize:24,color:'rgba(240,18,18,.9)'}}>{price}</span>\n</div>` },
+    ];
+
+    const images = [
+      { hash: 'assets/hero-author-cutout.png', usage: 'Hero — фото автора (Photoroom, вирізане), 1328×1128', size: '1192KB' },
+      { hash: 'assets/book-cover.png', usage: 'Обкладинка книги (замовити, верх), 658×969', size: '1612KB' },
+      { hash: 'assets/author-beach-photo.png', usage: '"Про автора" — фото на пляжі, 740×823', size: '1697KB' },
+      { hash: 'assets/card-photo-1.png', usage: 'Image64 — фото-картка №1, 326×222', size: '1647KB' },
+      { hash: 'assets/card-photo-2.png', usage: 'Image64 — фото-картка №2', size: '711KB' },
+      { hash: 'assets/card-photo-3.png', usage: 'Image64 — фото-картка №3 (найбільший файл, 11.4MB — стиснути перед вебом)', size: '11679KB' },
+      { hash: 'assets/video-preview.png', usage: 'Відео-прев\'ю (play button overlay), 1597×826', size: '703KB' },
+      { hash: 'assets/quote-decor-photo.png', usage: 'Декоративна пляма-фото (2 кропи, mix-blend multiply) біля цитати, 419×406', size: '140KB' },
+      { hash: 'assets/business-owner-photo.png', usage: '"Для власників бізнесу" — фото людини за ноутбуком, 707×631', size: '1120KB' },
+      { hash: 'assets/lead-magnet-ball-bg.png', usage: 'Фон круглої плашки "ОТРИМАТИ" (лід-магніт), 732×732', size: '2183KB' },
+      { hash: 'assets/paper-plane.png', usage: 'Паперовий літачок (mix-blend multiply), 159×159', size: '1180KB' },
+      { hash: 'assets/final-cta-bg.png', usage: 'Фінальний CTA — фон на всю ширину, 1920×841', size: '1956KB' },
+      { hash: 'assets/testimonial-card-photo.png', usage: 'Image70 — картка відгуку (фото), 348×606.5, ×3 повтори', size: '1089KB' },
+      { hash: 'assets/icon-quote-left.svg / icon-quote-2.svg', usage: 'Великі лапки-іконки (hero + цитата)', size: 'svg' },
+      { hash: 'assets/ball.svg', usage: 'Обводка+фон круглої плашки лід-магніту', size: 'svg' },
+      { hash: 'assets/icon-book.svg / icon-ebook.svg / icon-time-limit.svg', usage: 'Іконки в pill-картках цін', size: 'svg' },
+      { hash: 'assets/line-wavy-vertical.svg / -large.svg / -thick.svg', usage: 'Декоративні "рукописні" хвилясті лінії-розділювачі', size: 'svg' },
+      { hash: 'assets/arrow-cta.svg / arrow-left.svg / arrow-right.svg', usage: 'Стрілки біля CTA та слайдера відгуків', size: 'svg' },
+    ];
+
+    return { colors, sections, components, images };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{
+  ".site-header": {
+    "top": 0,
+    "left": 0,
+    "w": 1920,
+    "h": 85,
+    "font": "16px"
+  },
+  ".section--hero__heading": {
+    "top": 158,
+    "left": 95,
+    "w": 818,
+    "h": 306,
+    "font": "16px"
+  },
+  ".section--hero__title": {
+    "top": 158,
+    "left": 95,
+    "w": 663,
+    "h": 126,
+    "font": "134.784px"
+  },
+  ".section--hero__subtitle": {
+    "top": 314,
+    "left": 95,
+    "w": 818,
+    "h": 150,
+    "font": "45.3504px"
+  },
+  ".section--hero__plane": {
+    "top": -24,
+    "left": -50,
+    "w": 1328,
+    "h": 1134,
+    "font": "16px"
+  },
+  ".section--hero__quote": {
+    "top": 734,
+    "left": 1055,
+    "w": 691,
+    "h": 168,
+    "font": "16px"
+  },
+  ".section--hero__quote-mark": {
+    "top": 734,
+    "left": 1055,
+    "w": 124,
+    "h": 88,
+    "font": "16px"
+  },
+  ".section--order__cover": {
+    "top": 1232,
+    "left": 1115,
+    "w": 528,
+    "h": 741,
+    "font": "16px"
+  },
+  ".order-pill": {
+    "top": 1603,
+    "left": 277,
+    "w": 293,
+    "h": 81,
+    "font": "13.3333px"
+  },
+  "__hscroll": false
+}

@@ -1,0 +1,1565 @@
+/* ==========================================================================
+   Свобода — головний CSS файл теми.
+   Структура по секціях (BEM: .section--<name>__<element>--<modifier>),
+   design tokens знято з Figma (docs/figma/design-tokens.md).
+   Без Bootstrap/Tailwind/SASS — чистий CSS custom properties.
+   ========================================================================== */
+
+/* --- 1. Design tokens ---------------------------------------------------- */
+:root {
+	--red: #F01212;
+	--red-90: rgba(240, 18, 18, 0.9);
+	--black: #323232;
+	--gray: #606060;
+	--bg-alt: #F5F5F5;
+	--bg-base: #FFFFFF;
+	--accent-red-alt: #ff383c;
+
+	--font-display: "Cormorant Garamond", Georgia, serif;
+	--font-body: "Times New Roman", Times, serif;
+
+	--content-max-width: 1400px;
+	--section-padding-y: 160px;
+	--section-padding-x: 80px;
+
+	--breakpoint-mobile: 768px;
+}
+
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-600-normal-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2122;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-600-normal-cyrillic.woff2") format("woff2");
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-600-normal-cyrillic-ext.woff2") format("woff2");
+	unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: italic;
+	font-weight: 500;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-500-italic-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2122;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: italic;
+	font-weight: 500;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-500-italic-cyrillic.woff2") format("woff2");
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: italic;
+	font-weight: 500;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-500-italic-cyrillic-ext.woff2") format("woff2");
+	unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: italic;
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-700-italic-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2122;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: italic;
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-700-italic-cyrillic.woff2") format("woff2");
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+	font-family: "Cormorant Garamond";
+	font-style: italic;
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/cormorant-garamond-700-italic-cyrillic-ext.woff2") format("woff2");
+	unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F;
+}
+
+/* --- 2. Reset / base ------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+	margin: 0;
+	font-family: var(--font-body);
+	color: var(--black);
+	background: var(--bg-base);
+	line-height: 1.1;
+}
+
+/* Блокує скрол сторінки під відкритою мобільною панеллю навігації. */
+body.has-mobile-nav-open { overflow: hidden; }
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
+
+.section {
+	padding: var(--section-padding-y) var(--section-padding-x);
+	max-width: var(--content-max-width);
+	margin: 0 auto;
+}
+
+/* --- 3. Header ------------------------------------------------------------ */
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+	background: var(--bg-base);
+	padding: 26px 0; /* Figma: nav top 26 */
+}
+
+.site-header.is-compact {
+	padding: 12px 0;
+	background: rgba(255, 255, 255, 0.85);
+	backdrop-filter: blur(6px);
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.site-header__inner {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	width: 100%;
+	max-width: 1920px;
+	margin: 0 auto;
+	/* 41px / 1920px канва = 2.1354% (Дослідження - Свобода (лендінг).dc.html,
+	   розділ "Header (nav) — точні координати": left 41, width 1839). */
+	padding: 0 2.1354%;
+}
+
+.site-header__nav-list {
+	display: flex;
+	gap: 40.311px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font: 24px var(--font-body);
+}
+
+.site-header__nav--left { justify-self: start; }
+.site-header__nav--right { justify-self: end; }
+
+/* Пункти меню темні за замовчуванням, червоніють при ховері (не hardcoded
+   червоний, як припустив дослідницький документ, -- уточнено користувачем
+   після перевірки інтерактивного прототипу Figma). Логотип завжди червоний. */
+.site-header__nav-list a {
+	color: var(--black);
+	transition: color 0.2s ease;
+}
+.site-header__nav-list a:hover {
+	color: var(--red-90);
+}
+
+.site-header__logo {
+	justify-self: center;
+	font-family: var(--font-body);
+	font-weight: 400;
+	font-size: 30px;
+	color: var(--red-90);
+}
+
+/* Бургер-кнопка: прихована на десктопі, показується в мобільній медіа-query.
+   Іконка -- "рукописний" мазок (3 хвилясті лінії, assets/svg/icon-burger.svg),
+   не прямі бруски -- за зразком screenshots/mobile/section-hero.png. */
+.site-header__burger {
+	display: none;
+	position: relative;
+	/* ~45x28 виміряно з мобільного макета (бургер там помітно більший за 32px). */
+	width: 45px;
+	height: 28px;
+	padding: 0;
+	border: none;
+	background: none;
+	cursor: pointer;
+	justify-self: end;
+}
+
+.site-header__burger-icon {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.site-header__burger-icon--close {
+	opacity: 0;
+	transform: rotate(-90deg) scale(0.6);
+}
+
+.site-header__burger.is-open .site-header__burger-icon--open {
+	opacity: 0;
+	transform: rotate(90deg) scale(0.6);
+}
+
+.site-header__burger.is-open .site-header__burger-icon--close {
+	opacity: 1;
+	transform: rotate(0deg) scale(1);
+}
+
+/* Мобільна панель навігації — fade+slide замість миттєвого max-height, і
+   пункти проявляються з невеликим stagger (кожен трохи пізніше за попередній). */
+.site-header__mobile-nav {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	background: var(--bg-base);
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-12px);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.site-header__mobile-nav.is-open {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
+}
+
+.site-header__mobile-nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	font: 20px var(--font-body);
+	text-align: center;
+}
+
+.site-header__mobile-nav-list li {
+	opacity: 0;
+	transform: translateY(-8px);
+	transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li:nth-child(1) { transition-delay: 0.05s; }
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li:nth-child(2) { transition-delay: 0.1s; }
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li:nth-child(3) { transition-delay: 0.15s; }
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li:nth-child(4) { transition-delay: 0.2s; }
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li:nth-child(5) { transition-delay: 0.25s; }
+.site-header__mobile-nav.is-open .site-header__mobile-nav-list li:nth-child(6) { transition-delay: 0.3s; }
+
+.site-header__mobile-nav-list a {
+	color: var(--black);
+	transition: color 0.2s ease;
+}
+.site-header__mobile-nav-list a:hover {
+	color: var(--red-90);
+}
+
+/* --- 4. Buttons ------------------------------------------------------------ */
+.btn-order {
+	border: 2.519px solid var(--red-90);
+	border-radius: 57.947px;
+	padding: 24px 30px;
+	background: transparent;
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	font: 20px var(--font-body);
+	color: var(--red-90);
+	cursor: pointer;
+}
+
+.btn-solid-white {
+	background: rgba(255, 255, 255, 0.9);
+	border: none;
+	border-radius: 51px;
+	padding: 20px 24px;
+	color: var(--red-90);
+	font: 20px var(--font-body);
+	letter-spacing: 3.6px;
+	cursor: pointer;
+}
+
+.btn-presentation {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--accent-red-alt);
+	border: none;
+	border-radius: 79px;
+	padding: 20px 24px;
+	height: 67px;
+	width: 297px;
+	color: #fff;
+	font: 20px var(--font-body);
+	letter-spacing: 3.6px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+/* --- 5. Section: Hero ------------------------------------------------------
+   Координати нижче виміряні напряму з пікселів screenshots/hero-descktop.png
+   (Figma MCP вичерпав ліміт запитів), у перерахунку на канву 1920px, ПІСЛЯ
+   віднімання реальної висоти хедера (75px при 1920px). Загальна висота
+   Header+Hero на еталонному скріншоті = 1920 * (1277/2149) ≈ 1141px --
+   це включає хедер, тому Hero-контент власної висоти = 1141-75 = 1066px,
+   і саме від 1066 (не від 1138) рахуються top/height нижче. */
+.section--hero {
+	position: relative;
+	/* Full-bleed: усі left/top/width нижче — відсотки від Figma-канви 1920px.
+	   Загальний .section (max-width + padding, усі 4 сторони) звузив/зсунув
+	   би контейнер, тому тут це явно скидається повністю (не лише left/right —
+	   padding-top/bottom теж, інакше Hero зсувається вниз на зайвих 96px). */
+	max-width: none;
+	padding: 0;
+}
+
+.section--hero__inner {
+	position: relative;
+	width: 100%;
+	/* Канва дизайну: вище 1920 не росте, центрується -- %-координати дітей
+	   тоді дають рівно дизайнові px, композиція однакова на всіх ширинах. */
+	max-width: 1920px;
+	margin: 0 auto;
+	aspect-ratio: 1920 / 1063;
+}
+
+/* Дослідження - Свобода (лендінг).dc.html, розділ Hero "ЗАГОЛОВНИЙ БЛОК":
+   flex-column, gap 30.233px, alignItems:flex-start -- title auto-width
+   (nowrap), subtitle alignSelf:stretch (займає всю ширину контейнера і
+   природно переноситься на 2 рядки). Це чому title і subtitle мали
+   однаковий лівий край: flex-start вирівнює обидва по лівому краю
+   контейнера, а не спільна фіксована ширина з text-align:right. */
+.section--hero__heading {
+	position: absolute;
+	left: 4.95%;
+	top: 6.87%;
+	width: 42.6%;
+	display: flex;
+	flex-direction: column;
+	/* 30.233px (Figma) = 1.575vw; %-row-gap тут дорівнював 0 (auto-висота). */
+	gap: clamp(16px, 1.575vw, 30.233px);
+	align-items: flex-start;
+}
+
+.section--hero__title {
+	font-family: var(--font-display);
+	font-weight: 600;
+	/* Флюїдний розмір: 134.79px лише точно на 1920px канві (7.02vw), нижче
+	   плавно зменшується до 56px (мобільне значення), а не різко стрибає
+	   лише на брейкпоінті 768px -- інакше планшетний діапазон 769-1919px
+	   лишається без адаптації (текст переповнює свій %-контейнер). */
+	font-size: clamp(56px, 7.02vw, 134.79px);
+	line-height: 0.9346; /* 125.972/134.79 -- unitless, масштабується з font-size */
+	letter-spacing: 0.02em; /* Figma: 0.02em -- масштабується з font-size */
+	color: var(--red-90);
+	text-align: right;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.section--hero__subtitle {
+	align-self: stretch;
+	font-family: var(--font-body);
+	font-size: clamp(22px, 2.362vw, 45.35px);
+	line-height: 1.1;
+	letter-spacing: 0.02em;
+	white-space: pre-line;
+	text-transform: uppercase;
+}
+
+/* Дослідження doc: photo 1328x1128 (node 180:66, left 1 top -27) -- точні
+   розміри, не емпіричний підбір. top від'ємний: фото трохи виходить за верх
+   canvas (обрізається overflow:hidden секції). */
+/* Мобільний статичний кадр; на десктопі замість нього два шари нижче. */
+.section--hero__plane { display: none; }
+
+/* Шар 1: розрив паперу -- прямий шар СЕКЦІЇ (не канви), тому завжди
+   прориває лівий край екрана на будь-якій ширині; опущено і трохи
+   зрізано краєм (left від'ємний) на прохання дизайн-рев'ю. */
+.section--hero__paper {
+	position: absolute;
+	left: -1.5%;
+	top: 26%; /* опущено, щоб не налазило на тайтл/підзаголовок */
+	height: 71%;
+	aspect-ratio: 776 / 1540;
+	z-index: 1;
+	pointer-events: none;
+}
+
+/* Сегменти пробоїни: геометрія розрізу 62.89% x 42.99% (центр гирла отвору).
+   У стані спокою сходяться в піксельний оригінал зображення. */
+.section--hero__paper-piece {
+	position: absolute;
+	animation-duration: 0.9s;
+	animation-timing-function: cubic-bezier(0.34, 1.45, 0.44, 1); /* пружний переліт */
+	animation-delay: 0.08s;
+	animation-fill-mode: both;
+}
+
+/* Кропи мають перекриття 3px по лініях розрізу -- ховає субпіксельні шви
+   відсоткового позиціонування (однакові пікселі накладаються). */
+.section--hero__paper-piece--tl {
+	left: 0; top: 0; width: 63.2732%; height: 43.1818%;
+	transform-origin: 100% 100%;
+	animation-name: svoboda-tear-tl;
+}
+.section--hero__paper-piece--tr {
+	left: 62.5%; top: 0; width: 37.5%; height: 43.1818%;
+	transform-origin: 0 100%;
+	animation-name: svoboda-tear-tr;
+}
+.section--hero__paper-piece--bl {
+	left: 0; top: 42.7922%; width: 63.2732%; height: 57.2078%;
+	transform-origin: 100% 0;
+	animation-name: svoboda-tear-bl;
+}
+.section--hero__paper-piece--br {
+	left: 62.5%; top: 42.7922%; width: 37.5%; height: 57.2078%;
+	transform-origin: 0 0;
+	animation-name: svoboda-tear-br;
+}
+
+/* "Постріл": сегменти стиснуті до центру -> вибух назовні -> оригінал. */
+@keyframes svoboda-tear-tl {
+	0%   { transform: translate(4%, 4%) rotate(5deg) scale(0.965); }
+	60%  { transform: translate(-1%, -1%) rotate(-1.4deg) scale(1.008); }
+	100% { transform: none; }
+}
+@keyframes svoboda-tear-tr {
+	0%   { transform: translate(-4%, 4%) rotate(-5deg) scale(0.965); }
+	60%  { transform: translate(1%, -1%) rotate(1.4deg) scale(1.008); }
+	100% { transform: none; }
+}
+@keyframes svoboda-tear-bl {
+	0%   { transform: translate(4%, -4%) rotate(-5deg) scale(0.965); }
+	60%  { transform: translate(-1%, 1%) rotate(1.4deg) scale(1.008); }
+	100% { transform: none; }
+}
+@keyframes svoboda-tear-br {
+	0%   { transform: translate(-4%, -4%) rotate(5deg) scale(0.965); }
+	60%  { transform: translate(1%, 1%) rotate(-1.4deg) scale(1.008); }
+	100% { transform: none; }
+}
+
+/* Шар 2: літак -- прозорий спрайт у канві (коорд. з композита: left 340/1920,
+   top 358/1063, w 938/1920), летить по скролу (transform ззовні, initHeroPlaneFly). */
+.section--hero__fly {
+	position: absolute;
+	left: 17.72%;
+	top: 40%; /* опущено разом із пробоїною -- не перекриває підзаголовок */
+	width: 48.84%;
+	aspect-ratio: 1802 / 560;
+	z-index: 2;
+	pointer-events: none;
+	will-change: transform;
+	/* Розрахунок посадки (initHeroPlaneFly) веде лівий-верхній кут. */
+	transform-origin: 0 0;
+}
+
+.section--hero__fly img {
+	width: 100%;
+	height: 100%;
+}
+
+/* Після посадки на своє місце -- легке "дихання" в повітрі (initHeroPlaneBurst
+   вішає .is-floating по завершенню WAAPI-траєкторії). */
+.section--hero__fly.is-floating img {
+	animation: svoboda-plane-float 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes svoboda-plane-float {
+	from { transform: translateY(0); }
+	to   { transform: translateY(-9px); }
+}
+
+
+
+.section--hero__plane-img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.section--hero__quote {
+	position: absolute;
+	left: 54.95%;
+	top: 61.05%;
+	width: 36%;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin: 0;
+}
+
+.section--hero__quote-text {
+	font-family: var(--font-display);
+	font-style: italic;
+	font-weight: 500;
+	font-size: clamp(22px, 1.5625vw, 30px);
+	line-height: 1.4;
+	text-align: center;
+	color: rgba(0, 0, 0, 0.8);
+
+}
+
+.section--hero__quote-text strong {
+	font-weight: 700;
+	font-style: italic;
+}
+
+.svg-plane { width: 100%; height: auto; }
+
+/* Fade-in утиліта, використовується IntersectionObserver'ом (animations.js).
+   Йде перед .section--hero__quote-mark у каскаді — обидва селектори мають
+   однакову специфічність (0,1,0), тож порядок оголошення вирішує, і власні
+   opacity/transform quote-mark (нижче) мають перемагати над цими загальними. */
+[data-fade-in] {
+	opacity: 0;
+	transform: translateY(24px);
+	transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-fade-in].is-visible {
+	opacity: 1;
+	/* none, а не translateY(0): будь-який не-none transform створює stacking
+	   context і ламає mix-blend-mode у нащадків (біла "рамка" довкола
+	   обкладинки книги замість multiply-змішування з фоном секції). */
+	transform: none;
+}
+
+.section--hero__quote-mark {
+	display: block;
+	/* 124.23x89 (Дослідження doc) = 6.47vw від канви 1920px: рівно 124.23px
+	   на 1920 і пропорційно масштабується вище/нижче (зум, широкі екрани).
+	   height:auto тримає природну пропорцію SVG (viewBox 128.082x90.9489). */
+	width: min(6.47vw, 124.23px);
+	height: auto;
+	flex-shrink: 0;
+	opacity: 0;
+	transform: translateX(60px) scale(0.72);
+	/* 1020ms ease-out = Figma Motion (node 180:79): Slide in, From right,
+	   Distance 60, Duration 1020ms, Easing Ease out (docs/figma/animations.md). */
+	transition: opacity 1.02s ease-out, transform 1.02s ease-out;
+}
+
+.section--hero__quote-mark.is-visible {
+	opacity: 1;
+	transform: translateX(0) scale(1);
+}
+
+/* --- 6. Section: Order -------------------------------------------------------
+   Дослідження doc: top 1138, h 1137, bg #F5F5F5, flex row gap 90 center;
+   pill-картки border-radius 57.95 з подвійною обводкою 1.26px (inset+outset
+   box-shadow = "рукописний" подвійний штрих), фото книги 658x969 multiply. */
+.section--order {
+	/* Фонова смуга #F5F5F5 — на всю ширину екрана, контент обмежено в __inner.
+	   Вертикальні поля/розриви виміряні попіксельно зі screenshots/section-2.png
+	   (у перерахунку на 1920): книжка 528x747, заголовок->пігулки 95px,
+	   пігулки->тираж 71px, повітря зверху більше ніж знизу. */
+	max-width: none;
+	background: var(--bg-alt);
+	padding: clamp(80px, 8.333vw, 160px) 0;
+}
+
+.section--order__inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(90px, 10.2vw, 197px);
+	max-width: 1600px;
+	margin: 0 auto;
+	padding: 0 var(--section-padding-x);
+}
+
+.section--order__content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.section--order__title {
+	font-family: var(--font-body);
+	font-weight: 700;
+	font-size: clamp(28px, 1.875vw, 36px);
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: rgb(50, 50, 50);
+	margin-bottom: clamp(48px, 4.95vw, 95px);
+}
+
+.section--order__pills {
+	display: flex;
+	gap: clamp(20px, 1.6vw, 30.23px);
+}
+
+.order-pill {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 24px 30px;
+	border: none;
+	border-radius: 57.95px;
+	background: transparent;
+	cursor: pointer;
+	font-family: var(--font-body);
+	/* Подвійний штрих контуру (внутрішній + зовнішній), як у макеті. */
+	box-shadow:
+		inset 0 0 0 1.26px var(--red-90),
+		0 0 0 1.26px var(--red-90);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.order-pill:hover {
+	box-shadow:
+		inset 0 0 0 2px var(--red-90),
+		0 0 0 2px var(--red-90);
+	transform: translateY(-2px);
+}
+
+.order-pill__icon {
+	width: 44px;
+	height: 33px;
+	object-fit: contain;
+}
+
+.order-pill__label {
+	font-size: 20px;
+	text-transform: uppercase;
+	color: var(--black);
+	letter-spacing: 0.5px;
+}
+
+.order-pill__price {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--red-90);
+	white-space: nowrap;
+}
+
+.section--order__limited {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	font-size: 20.16px;
+	color: var(--gray);
+	margin-top: clamp(36px, 3.7vw, 71px);
+}
+
+.section--order__limited-icon {
+	width: 30px;
+	height: 30px;
+}
+
+/* Асет book-cover.png: обрізано до самої книжки (1596x2240) І конвертовано
+   "білий фон -> альфа" (un-multiply from white), що математично відтворює
+   mix-blend-mode:multiply прозорістю. Це усуває першопричину білого спалаху
+   при завантаженні (blend не діяв, поки transform анімації створював stacking
+   context) і знімає всі обмеження на transform-анімації книжки. */
+.section--order__cover {
+	flex: 0 0 auto;
+	width: clamp(240px, 27.5vw, 528px);
+}
+
+.section--order__cover img {
+	width: 100%;
+	height: auto;
+}
+
+/* Власна анімація появи книжки: підйом + м'яке "осідання" масштабу.
+   Перебиває загальний [data-fade-in] (нижче в каскаді + специфічніший селектор). */
+.section--order__cover[data-fade-in] {
+	opacity: 0;
+	transform: none;
+	transition: none;
+}
+
+.section--order__cover[data-fade-in].is-visible {
+	opacity: 1;
+	animation: svoboda-book-in 0.9s cubic-bezier(0.22, 0.9, 0.3, 1) both;
+}
+
+@keyframes svoboda-book-in {
+	0%   { opacity: 0; transform: translateY(56px) scale(0.94) rotate(0.8deg); }
+	60%  { opacity: 1; }
+	100% { opacity: 1; transform: none; }
+}
+
+.order-form {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.order-form label {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	font-size: 16px;
+}
+
+/* Поля-пігулки як у макеті модалки (округлі, тонка сіра обводка). */
+.order-form input,
+.order-form select {
+	padding: 13px 20px;
+	border: 1px solid #cfcaca;
+	border-radius: 26px;
+	font: 15px var(--font-body);
+	color: var(--black);
+	background: #fff;
+	width: 100%;
+}
+
+.order-form input::placeholder { color: #9a9494; }
+
+.order-form input.is-invalid,
+.order-form select.is-invalid {
+	border-color: var(--red);
+}
+
+.order-form select {
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23606060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 18px center;
+}
+
+/* Обгортка полів НП: власний gap, бо gap самої .order-form діє лише між
+   прямими дітьми і не сягає полів усередині цієї обгортки. */
+.order-form__np-fields {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.order-form__np-fields[hidden] { display: none; }
+
+/* --- Кастомний випадаючий список (нативний popup <select> не стилізується) --
+   Нативний <select> лишається в DOM прихованим -- тримає значення для форми
+   і для NP-AJAX (який динамічно наповнює options); видимий UI -- кнопка+меню. */
+.dc-select { position: relative; }
+
+.dc-select > select {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.dc-select__toggle {
+	width: 100%;
+	padding: 13px 40px 13px 20px;
+	border: 1px solid #cfcaca;
+	border-radius: 26px;
+	background: #fff url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23606060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 18px center;
+	font: 15px var(--font-body);
+	color: var(--black);
+	text-align: left;
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	transition: border-color 0.2s ease;
+}
+
+.dc-select.is-open .dc-select__toggle { border-color: var(--red-90); }
+.dc-select.is-disabled .dc-select__toggle { color: #9a9494; cursor: default; }
+
+.dc-select__menu {
+	position: absolute;
+	top: calc(100% + 6px);
+	left: 0;
+	right: 0;
+	z-index: 20;
+	background: #fff;
+	border: 1px solid #e3dede;
+	border-radius: 16px;
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+	max-height: 216px;
+	overflow-y: auto;
+	padding: 6px;
+}
+
+.dc-select__menu[hidden] { display: none; }
+
+.dc-select__option {
+	display: block;
+	width: 100%;
+	padding: 10px 14px;
+	border: none;
+	border-radius: 10px;
+	background: none;
+	font: 15px var(--font-body);
+	color: var(--black);
+	text-align: left;
+	cursor: pointer;
+}
+
+.dc-select__option:hover { background: rgba(240, 18, 18, 0.07); }
+
+.dc-select__option.is-selected {
+	color: var(--red);
+	font-weight: 700;
+}
+
+/* --- 6b. Модалка замовлення (дизайн: order-modalref #3/#4) ------------------- */
+.order-modal[hidden] { display: none; }
+
+.order-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+}
+
+.order-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(40, 36, 36, 0.55);
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.order-modal__wrap {
+	position: relative;
+	max-height: calc(100vh - 48px);
+	display: flex;
+	flex-direction: column;
+}
+
+.order-modal__close {
+	align-self: flex-end;
+	margin-right: 2px;
+	margin-bottom: 10px;
+	width: 34px;
+	height: 34px;
+	border: none;
+	background: none;
+	color: #fff;
+	font-size: 26px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.order-modal__dialog {
+	position: relative;
+	width: min(365px, calc(100vw - 48px));
+	background: #fff;
+	border-radius: 6px;
+	padding: 18px 16px 22px;
+	overflow-y: auto;
+	box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+
+.order-modal .order-form { gap: 12px; }
+
+/* Рядок варіанта: чекбокс / іконка / назва / степер / ціна, червона лінія знизу.
+   label.variant-row: та сама специфічність (0,1,1), що й .order-form label
+   (flex-direction:column), але пізніше в каскаді -- рядок лишається рядком. */
+label.variant-row {
+	flex-direction: row;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 2px 12px;
+	border-bottom: 1px solid rgba(240, 18, 18, 0.45);
+	font-size: 15px;
+}
+
+.variant-row input[type="checkbox"] {
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+	border: 1px solid #8a8484;
+	border-radius: 2px;
+	background: #fff;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+.variant-row input[type="checkbox"]:checked {
+	border-color: var(--red-90);
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10'%3E%3Cpath d='M1.5 5.5 4.5 8.5 10.5 1.5' stroke='rgb(240,18,18)' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.variant-row__icon { width: 26px; height: 22px; object-fit: contain; flex-shrink: 0; }
+
+.variant-row__label {
+	font-size: 13.5px;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	color: var(--black);
+	flex: 1 1 auto;
+	white-space: nowrap;
+}
+
+.variant-row__qty {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	visibility: hidden; /* показується лише коли варіант обрано */
+}
+
+.variant-row.is-checked .variant-row__qty { visibility: visible; }
+
+.variant-row__qty button {
+	width: 18px;
+	height: 18px;
+	border: 1px solid var(--red-90);
+	border-radius: 50%;
+	background: none;
+	color: var(--red-90);
+	font-size: 13px;
+	line-height: 1;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.variant-row__qty-label {
+	font-size: 13px;
+	font-weight: 700;
+	min-width: 26px;
+	text-align: center;
+}
+
+.variant-row__price {
+	font-size: 15px;
+	font-weight: 700;
+	color: #9a9494;
+	min-width: 48px;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.variant-row.is-checked .variant-row__price { color: var(--red); }
+
+.order-form__total {
+	text-align: right;
+	font-size: 17px;
+	font-weight: 700;
+	color: var(--red);
+	padding: 2px 2px 4px;
+}
+
+/* Промокод: кнопка-пігулка, що розкриває поле. */
+.order-form__promo-toggle {
+	width: 100%;
+	padding: 12px 20px;
+	border: 1px solid #cfcaca;
+	border-radius: 26px;
+	background: none;
+	font: 14px var(--font-body);
+	color: var(--gray);
+	cursor: pointer;
+}
+
+.order-form__promo[hidden] { display: none; }
+
+.order-form__note {
+	text-align: center;
+	font-size: 12.5px;
+	color: var(--black);
+	margin: 20px 0;
+}
+
+.order-form__error {
+	text-align: center;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--red);
+}
+
+.order-form__error[hidden] { display: none; }
+
+.order-form__submit {
+	width: 100%;
+	padding: 17px 24px;
+	border: none;
+	border-radius: 32px;
+	background: var(--accent-red-alt);
+	color: #fff;
+	font: 16px var(--font-body);
+	letter-spacing: 0.24em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter 0.2s ease;
+}
+
+.order-form__submit:hover { filter: brightness(1.06); }
+.order-form__submit:disabled { opacity: 0.7; cursor: default; }
+
+/* Тост "Книгу відправлено на пошту" (дизайн: правий верхній кут). */
+.order-toast {
+	position: fixed;
+	top: 24px;
+	right: 24px;
+	z-index: 300;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	background: #fff;
+	border-radius: 6px;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+	padding: 20px 28px;
+	font-size: 15px;
+	color: var(--black);
+	opacity: 0;
+	transform: translateY(-12px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	pointer-events: none;
+}
+
+.order-toast.is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+.order-toast[hidden] { display: none; }
+
+.order-toast__icon { width: 88px; height: auto; }
+
+/* --- 7. Section: About ------------------------------------------------------ */
+.section--about__inner {
+	display: grid;
+	grid-template-columns: 1fr 1.4fr;
+	gap: 64px;
+	align-items: center;
+}
+
+.section--about__title,
+.section--for-you__title,
+.section--transformation__title,
+.section--business__title,
+.section--reviews__title {
+	font-family: var(--font-display);
+	font-weight: 600;
+	font-size: 100px;
+	line-height: 1;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--black);
+	margin-bottom: 48px;
+}
+
+.section--about__photo img { border-radius: 12px; }
+
+/* --- 8. Section: For You (collage) ----------------------------------------- */
+.section--for-you__list {
+	list-style: none;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	font-size: 24px;
+	margin-bottom: 64px;
+}
+
+.section--for-you__list-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.section--for-you__marker { color: var(--red-90); }
+
+.section--for-you__collage {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+}
+
+.section--for-you__collage-photo {
+	aspect-ratio: 3 / 4;
+	background: var(--bg-alt);
+	border-radius: 8px;
+}
+
+.section--for-you__collage-line {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+/* --- 9. Section: Video ------------------------------------------------------- */
+.section--video__player {
+	position: relative;
+	border-radius: 12px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.section--video__poster { width: 100%; }
+
+.section--video__play-btn {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 88px;
+	height: 88px;
+	border-radius: 50%;
+	border: none;
+	background: rgba(255, 255, 255, 0.9);
+	color: var(--red-90);
+	font-size: 28px;
+	cursor: pointer;
+}
+
+.section--video__play-btn.is-pulsing {
+	animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { box-shadow: 0 0 0 0 rgba(240, 18, 18, 0.4); }
+	50% { box-shadow: 0 0 0 16px rgba(240, 18, 18, 0); }
+}
+
+.section--video__caption {
+	margin-top: 16px;
+	color: var(--gray);
+}
+
+/* --- 10. Section: Quote ------------------------------------------------------ */
+.section--quote__inner {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 48px;
+	align-items: center;
+}
+
+.section--quote__text {
+	font-family: var(--font-display);
+	font-style: italic;
+	font-weight: 500;
+	font-size: 30px;
+	color: rgba(0, 0, 0, 0.8);
+}
+
+.section--quote__sketch { will-change: transform; }
+
+/* --- 11. Section: Transformation --------------------------------------------- */
+.section--transformation__route { position: relative; }
+
+.section--transformation__line { width: 100%; height: auto; }
+
+.transformation-line {
+	stroke-dasharray: 1;
+	stroke-dashoffset: 1;
+}
+
+.section--transformation__plane,
+.section--transformation__ball {
+	position: absolute;
+	width: 60px;
+	will-change: transform, opacity;
+}
+
+.section--transformation__ball {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: radial-gradient(circle at 30% 30%, var(--accent-red-alt), var(--black));
+	opacity: 0;
+}
+
+.section--transformation__steps {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 32px;
+	margin-top: 48px;
+}
+
+.section--transformation__step-number {
+	font-family: var(--font-display);
+	font-size: 32px;
+	color: var(--red-90);
+}
+
+.section--transformation__step.is-active .section--transformation__step-number {
+	color: var(--accent-red-alt);
+}
+
+/* --- 12. Section: Business ---------------------------------------------------- */
+.section--business__points {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 32px;
+	margin: 48px 0;
+}
+
+.section--business__point-number {
+	font-family: var(--font-display);
+	font-size: 32px;
+	color: var(--red-90);
+	display: block;
+}
+
+/* --- 13. Section: Reviews (dark, starry) --------------------------------------- */
+.section--reviews {
+	background: #0d0d14;
+	color: #fff;
+	max-width: none;
+	background-image: radial-gradient(1px 1px at 20% 30%, #fff 100%, transparent),
+		radial-gradient(1px 1px at 70% 60%, #fff 100%, transparent),
+		radial-gradient(1px 1px at 40% 80%, #fff 100%, transparent);
+	background-size: 300px 300px;
+}
+
+.section--reviews__title { color: #fff; }
+
+.reviews-slider { position: relative; max-width: 900px; margin: 0 auto; }
+
+.reviews-slider__track {
+	display: flex;
+	overflow: hidden;
+}
+
+.reviews-slider__slide {
+	flex: 0 0 100%;
+	padding: 0 48px;
+	text-align: center;
+}
+
+.reviews-slider__arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	color: #fff;
+	font-size: 24px;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.reviews-slider__arrow--prev { left: 0; }
+.reviews-slider__arrow--next { right: 0; }
+
+.reviews-slider__dots {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 24px;
+}
+
+.reviews-slider__dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.4);
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+.reviews-slider__dot.is-active { background: #fff; }
+
+/* --- 14. Section: Final CTA ------------------------------------------------------ */
+.section--cta {
+	max-width: none;
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	color: #fff;
+	text-align: center;
+}
+
+.section--cta::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.35);
+}
+
+.section--cta__inner {
+	position: relative;
+	z-index: 1;
+}
+
+.section--cta__title {
+	font-family: var(--font-display);
+	font-size: 60px;
+	margin-bottom: 32px;
+}
+
+.section--cta__actions {
+	display: flex;
+	justify-content: center;
+	gap: 24px;
+}
+
+.section--cta .btn-order { border-color: #fff; color: #fff; }
+
+/* --- 15. Footer --------------------------------------------------------------- */
+.site-footer {
+	padding: 48px var(--section-padding-x);
+	background: var(--bg-alt);
+	text-align: center;
+	color: var(--gray);
+}
+
+.site-footer__contacts,
+.site-footer__socials {
+	display: flex;
+	justify-content: center;
+	gap: 24px;
+	list-style: none;
+	padding: 0;
+	margin-top: 12px;
+}
+
+/* --- 16a. Responsive (<= 992px): стек Hero + Order -----------------------------
+   Абсолютна %-розкладка Hero і 2-колонковий Order тримаються лише до ~1000px:
+   нижче clamp-мінімуми шрифтів (56/22px) переростають свої %-бокси — підзаголовок
+   лягає на крило літачка, цитата впирається в низ секції, книжка стискається.
+   Тому стек вмикається на 992px, а не на 768px (там лишаються дрібніші правки). */
+@media (max-width: 992px) {
+	.section--hero {
+		/* 80px під цитатою до наступної секції (Figma mobile, gap-чіп "80"). */
+		padding-bottom: 80px;
+	}
+
+	.section--hero__title {
+		line-height: 1.05;
+		/* Неперервна крива: 64px@375 -> 70px@992 (desktop 7.02vw@993 = 69.7px),
+		   без стрибка на брейкпоінті. */
+		font-size: clamp(56px, calc(60.4px + 0.97vw), 72px);
+	}
+
+	.section--hero__inner {
+		position: static;
+		aspect-ratio: auto;
+		display: flex;
+		flex-direction: column;
+		/* Явні margin-и замість gap: відступи в макеті різні (25 фото->заголовок,
+		   ~50 підзаголовок->цитата), однаковий gap їх не відтворює. */
+		gap: 0;
+	}
+
+	.section--hero__heading,
+	.section--hero__quote {
+		position: static;
+		width: 100%;
+	}
+
+	/* .section--hero__plane лишається position:relative (НЕ static) --
+	   його дочірній <img> має position:absolute;inset:0 і потребує позиціонованого
+	   батька саме тут, інакше картинка "вилітає" аж до .section--hero (яка й
+	   далі position:relative) і розтягується на всю секцію замість малого боксу.
+	   left:0 обов'язковий: з десктопного правила протікає left:-50px, який у
+	   relative-режимі зсуває бокс і зрізає композицію збоку екрана.
+	   375/209 -- точний розмір фото-фрейму з мобільного Figma-макета
+	   ("375 Fill x 209"); object-position center дає стабільний однаковий кадр
+	   (літачок по центру, розрив паперу біля лівого краю) на будь-якій ширині. */
+	.section--hero__plane {
+		display: block;
+		position: relative;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 375 / 209;
+	}
+
+	/* Шаровий десктопний варіант (папір + політ) на мобільному вимкнено. */
+	.section--hero__paper,
+	.section--hero__fly {
+		display: none;
+	}
+
+	/* Картинка (.section--hero__plane) лишається full-bleed (до країв екрана,
+	   як на референсі), а текстовим елементам нижче повертаємо звичайні
+	   бокові відступи -- інакше вони теж стоять впритул до країв. */
+	.section--hero__heading {
+		align-items: center;
+		text-align: center;
+		padding: 0 16px;
+		/* 25px між фото і заголовком (Figma mobile, gap-чіп "25"). */
+		margin-top: 25px;
+		gap: 12px;
+	}
+
+	.section--hero__title {
+		text-align: center;
+		white-space: normal;
+	}
+
+	.section--hero__subtitle {
+		/* 22.1px@375 -> 23.5px@992 = desktop 2.362vw@993; без стрибка. */
+		font-size: clamp(20px, calc(21.3px + 0.22vw), 26px);
+		text-align: center;
+	}
+
+	/* Лапка стоїть НАД цитатою (колонка), а не поруч (рядок, як на десктопі)
+	   -- див. screenshots/mobile/section-hero.png. */
+	.section--hero__quote {
+		flex-direction: column;
+		align-items: center;
+		gap: 14px;
+		padding: 0 26px;
+		margin-top: 50px;
+	}
+
+	.section--hero__quote-mark {
+		/* ~57px при 375 (15.5% viewport, виміряно з мобільного референсу). */
+		width: 15.5vw;
+		max-width: 72px;
+		max-height: none;
+		height: auto;
+	}
+
+	.section--hero__quote-text {
+		margin-top: 0;
+		max-width: 340px;
+	}
+
+	/* Order: обкладинка книги ПЕРШОЮ (зверху), далі заголовок / картки /
+	   "Тираж обмежений" -- див. screenshots/mobile/section-order.png. */
+	.section--order {
+		padding: 80px 0;
+	}
+
+	.section--order__inner {
+		flex-direction: column;
+		gap: 48px;
+	}
+
+	.section--order__cover {
+		order: -1;
+		flex-basis: auto;
+		width: 340px;
+		position: relative;
+		left: -15px;
+
+	}
+
+	.section--order__pills {
+		flex-direction: column;
+		width: 100%;
+		max-width: 460px;
+	}
+
+	.order-pill {
+		justify-content: space-between;
+		width: 100%;
+		padding: 22px 30px;
+	}
+}
+
+/* --- 16b. Responsive (mobile <= 768px, referencia 375px у Figma) ---------------- */
+@media (max-width: 768px) {
+	:root {
+		--section-padding-x: 24px;
+		--section-padding-y: 56px;
+	}
+
+	.section--about__title,
+	.section--for-you__title,
+	.section--transformation__title,
+	.section--business__title,
+	.section--reviews__title {
+		font-size: 44px;
+	}
+
+	.section--about__inner,
+	.section--quote__inner {
+		grid-template-columns: 1fr;
+	}
+
+	.section--for-you__collage,
+	.section--transformation__steps,
+	.section--business__points {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* --- 17. Responsive: хедер перемикається на бургер раніше, ніж стек Hero --
+   3-колонкова сітка nav-груп (по 3 пункти, довгі українські слова) вже не
+   влазить desktop-friendly ~1024-1150px і переносить слова на 2 рядки, тому
+   для хедера окремий, ширший брейкпоінт, ніж 768px у Hero/секцій вище. */
+@media (max-width: 1150px) {
+	.site-header__inner {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.site-header__nav { display: none; }
+
+	.site-header__logo {
+		text-transform: uppercase;
+		font-size: 26px;
+	}
+
+	.site-header__burger { display: flex; }
+
+	.site-header__mobile-nav { display: block; }
+}
+
+/* --- 18. prefers-reduced-motion: вимикає декоративний рух ------------------- */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	html { scroll-behavior: auto; }
+
+	[data-fade-in],
+	.section--hero__quote-mark,
+	.section--order__cover[data-fade-in] {
+		opacity: 1;
+		transform: none;
+	}
+}

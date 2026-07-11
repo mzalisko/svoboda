@@ -1,0 +1,49 @@
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306" # локальний доступ для дебагу, не публікувати назовні в проді
+
+  wordpress:
+    image: wordpress:php8.2-apache
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      # Офіційний образ wordpress вписує WORDPRESS_CONFIG_EXTRA у wp-config.php
+      # при старті контейнера (файл генерується щоразу, не комітиться в git) —
+      # так секрети йдуть з .env і не потрапляють у репозиторій.
+      WORDPRESS_CONFIG_EXTRA: |
+        define('MONOBANK_TOKEN', '${MONOBANK_TOKEN}');
+        define('NOVAPOSHTA_API_KEY', '${NOVAPOSHTA_API_KEY}');
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+      - wp_core:/var/www/html
+    ports:
+      - "8080:80"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+    ports:
+      - "8081:80"
+
+volumes:
+  db_data:
+  wp_core:
