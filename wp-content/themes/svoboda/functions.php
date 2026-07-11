@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SVOBODA_THEME_VERSION', '0.1.0' );
+define( 'SVOBODA_THEME_VERSION', time() );
 define( 'SVOBODA_THEME_DIR', get_template_directory() );
 define( 'SVOBODA_THEME_URI', get_template_directory_uri() );
 
