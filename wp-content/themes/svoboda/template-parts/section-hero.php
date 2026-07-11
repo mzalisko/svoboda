@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $title    = get_sub_field( 'hero_title' ) ?: 'СВОБОДА';
-$subtitle = get_sub_field( 'hero_subtitle' );
-$quote    = get_sub_field( 'hero_quote' );
+$subtitle = get_sub_field( 'hero_subtitle' ) ?: "Шлях за межі реального.  Шлях на грані можливого.";
+$quote    = get_sub_field( 'hero_quote' ) ?: "Ми не просто бачимо як події відбуваються з нами. Ми їх створюємо. Своїм внутрішнім станом, думками, вірою.<br><br>Ви дізнаєтеся як підкорити реальність.";
 ?>
 <section class="section section--hero" id="hero">
 	<?php
@@ -19,6 +19,9 @@ $quote    = get_sub_field( 'hero_quote' );
 	// САМОГО ЕКРАНА (прямий шар секції, поза центрованою 1920-канвою),
 	// літак -- окремий прозорий спрайт, що летить по скролу (data-hero-fly).
 	?>
+	<!-- Фонові елементи: вирізаний силует автора -->
+	<div class="section--hero__author" aria-hidden="true"></div>
+
 	<?php
 	// Пробоїна порізана на 4 радіальні сегменти навколо гирла отвору:
 	// на старті вони стиснуті до центру ("закритий" отвір), у момент пострілу

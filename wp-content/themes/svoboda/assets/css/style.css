@@ -404,6 +404,22 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 /* Мобільний статичний кадр; на десктопі замість нього два шари нижче. */
 .section--hero__plane { display: none; }
 
+/* Автор - фоновий силует (position absolute відносно inner 1920-канви,
+   але зсунутий по дизайну). На мобільному приховується, бо там цілісний колаж. */
+.section--hero__author {
+	position: absolute;
+	left: 0.052%; /* 1px / 1920px */
+	top: -2.54%; /* -27px / 1063px */
+	width: 69.17%; /* 1328px / 1920px */
+	height: 106.11%; /* 1128px / 1063px */
+	z-index: 0;
+	pointer-events: none;
+	background-image: url('../img/hero-author-cutout.png');
+	background-position: 570.938% 0%;
+	background-size: 100.525% 114.338%;
+	background-repeat: no-repeat;
+}
+
 /* Шар 1: розрив паперу -- прямий шар СЕКЦІЇ (не канви), тому завжди
    прориває лівий край екрана на будь-якій ширині; опущено і трохи
    зрізано краєм (left від'ємний) на прохання дизайн-рев'ю. */
@@ -1411,9 +1427,10 @@ label.variant-row {
 		aspect-ratio: 375 / 209;
 	}
 
-	/* Шаровий десктопний варіант (папір + політ) на мобільному вимкнено. */
+	/* Шаровий десктопний варіант (папір + політ + силует автора) на мобільному вимкнено. */
 	.section--hero__paper,
-	.section--hero__fly {
+	.section--hero__fly,
+	.section--hero__author {
 		display: none;
 	}
 
