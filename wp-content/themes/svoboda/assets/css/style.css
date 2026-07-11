@@ -434,22 +434,18 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 .section--hero__paper-piece--tl {
 	left: 0; top: 0; width: 63.2732%; height: 43.1818%;
 	transform-origin: 100% 100%;
-	animation-name: svoboda-tear-tl;
 }
 .section--hero__paper-piece--tr {
 	left: 62.5%; top: 0; width: 37.5%; height: 43.1818%;
 	transform-origin: 0 100%;
-	animation-name: svoboda-tear-tr;
 }
 .section--hero__paper-piece--bl {
 	left: 0; top: 42.7922%; width: 63.2732%; height: 57.2078%;
 	transform-origin: 100% 0;
-	animation-name: svoboda-tear-bl;
 }
 .section--hero__paper-piece--br {
 	left: 62.5%; top: 42.7922%; width: 37.5%; height: 57.2078%;
 	transform-origin: 0 0;
-	animation-name: svoboda-tear-br;
 }
 
 /* "Постріл": сегменти стиснуті до центру -> вибух назовні -> оригінал. */
@@ -501,8 +497,15 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 }
 
 @keyframes svoboda-plane-float {
-	from { transform: translateY(0); }
-	to   { transform: translateY(-9px); }
+	0% {
+		transform: translateY(0) rotate(0deg);
+	}
+	50% {
+		transform: translateY(-8px) rotate(-1.5deg);
+	}
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
 }
 
 
@@ -1410,7 +1413,7 @@ label.variant-row {
 		top: 0;
 		width: 100%;
 		height: auto;
-		aspect-ratio: 375 / 209;
+		aspect-ratio: 2552 / 2466;
 	}
 
 	/* Шаровий десктопний варіант (папір + політ) на мобільному вимкнено. */
@@ -1426,8 +1429,8 @@ label.variant-row {
 		align-items: center;
 		text-align: center;
 		padding: 0 16px;
-		/* Збільшено відступ до 54px відповідно до дизайну Figma mobile, щоб прибрати ефект обрізання */
-		margin-top: 54px;
+		/* 25px між фото і заголовком (Figma mobile, gap-чіп "25"). */
+		margin-top: 25px;
 		gap: 12px;
 	}
 
