@@ -570,8 +570,16 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	width: min(6.47vw, 124.23px);
 	height: auto;
 	flex-shrink: 0;
+	opacity: 0;
+	transform: translateX(60px) scale(0.72);
+	/* 1020ms ease-out = Figma Motion (node 180:79): Slide in, From right,
+	   Distance 60, Duration 1020ms, Easing Ease out (docs/figma/animations.md). */
+	transition: opacity 1.02s ease-out, transform 1.02s ease-out;
+}
+
+.section--hero__quote-mark.is-visible {
 	opacity: 1;
-	transform: none;
+	transform: translateX(0) scale(1);
 }
 
 /* --- 6. Section: Order -------------------------------------------------------
@@ -1402,7 +1410,7 @@ label.variant-row {
 		top: 0;
 		width: 100%;
 		height: auto;
-		aspect-ratio: 375 / 262;
+		aspect-ratio: 375 / 209;
 	}
 
 	/* Шаровий десктопний варіант (папір + політ) на мобільному вимкнено. */
@@ -1418,8 +1426,8 @@ label.variant-row {
 		align-items: center;
 		text-align: center;
 		padding: 0 16px;
-		/* 25px між фото і заголовком (Figma mobile, gap-чіп "25"). */
-		margin-top: 25px;
+		/* Збільшено відступ до 54px відповідно до дизайну Figma mobile, щоб прибрати ефект обрізання */
+		margin-top: 54px;
 		gap: 12px;
 	}
 

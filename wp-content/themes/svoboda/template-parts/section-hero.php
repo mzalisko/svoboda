@@ -59,6 +59,8 @@ $quote    = get_sub_field( 'hero_quote' ) ?: "Ми не просто бачим�
 					src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/svg/hero-quote-mark.svg' ); ?>"
 					alt=""
 					class="section--hero__quote-mark"
+					data-fade-in
+					data-fade-delay="300"
 				>
 				<div class="section--hero__quote-text">
 					<?php echo wp_kses_post( $quote ); ?>
