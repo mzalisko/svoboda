@@ -922,15 +922,29 @@
 			var p = Math.min( 1, Math.max( 0, scrollY / heroHeight ) );
 			var e = easeInOut( p );
 
-			// Зсув: літачок летить праворуч (на 50% ширини в'юпорту) і вниз (на 90% висоти в'юпорту)
 			var vw = window.innerWidth;
 			var vh = window.innerHeight;
-			var bx = e * ( vw * 0.5 );
-			var by = p * ( vh * 0.9 );
 
-			// Поворот і зменшення масштабу
-			var ang = p * 12;
-			var scale = 1 - p * 0.3;
+			// Траєкторія -- професійна кубічна Безьє (не пряма лінія):
+			// літак вилітає трохи вгору і вперед, планує, потім пікує вниз-праворуч і зникає.
+			var dx = vw * 0.6;
+			var dy = vh * 0.95;
+
+			var p1x = dx * 0.25, p1y = -vh * 0.16;
+			var p2x = dx * 0.70, p2y = dy + vh * 0.05;
+
+			var t = e, mt = 1 - t;
+			var bx = 3 * mt * mt * t * p1x + 3 * mt * t * t * p2x + t * t * t * dx;
+			var by = 3 * mt * mt * t * p1y + 3 * mt * t * t * p2y + t * t * t * dy;
+
+			// Розрахунок кута нахилу за дотичною (банкування носа за курсом польоту)
+			var dxdt = 3 * mt * mt * p1x + 6 * mt * t * ( p2x - p1x ) + 3 * t * t * ( dx - p2x );
+			var dydt = 3 * mt * mt * p1y + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( dy - p2y );
+			var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
+			ang = Math.max( -16, Math.min( 16, ang ) );
+			ang *= Math.min( 1, p * 6 ) * ( 1 - Math.pow( t, 3 ) );
+
+			var scale = 1 - p * 0.4;
 			
 			// Плавне зникнення (opacity) ближче до кінця скролу Hero
 			var opacity = 1;
