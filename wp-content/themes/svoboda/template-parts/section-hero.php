@@ -50,12 +50,12 @@ $quote    = get_sub_field( 'hero_quote' ) ?: "Ми не просто бачим�
 		</div>
 
 		<div class="section--hero__heading">
-			<h1 class="section--hero__title" data-fade-in>
+			<h1 class="section--hero__title">
 				<?php echo esc_html( $title ); ?>
 			</h1>
 
 			<?php if ( $subtitle ) : ?>
-				<p class="section--hero__subtitle" data-fade-in data-fade-delay="150">
+				<p class="section--hero__subtitle">
 					<?php echo esc_html( $subtitle ); ?>
 				</p>
 			<?php endif; ?>
@@ -67,8 +67,6 @@ $quote    = get_sub_field( 'hero_quote' ) ?: "Ми не просто бачим�
 					src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/svg/hero-quote-mark.svg' ); ?>"
 					alt=""
 					class="section--hero__quote-mark"
-					data-fade-in
-					data-fade-delay="300"
 				>
 				<div class="section--hero__quote-text">
 					<?php echo wp_kses_post( $quote ); ?>
