@@ -844,8 +844,8 @@
 				sy = flyRect.height * 0.43;
 			}
 
-			var p1x = sx * 0.55, p1y = sy - flyRect.height * 0.9;
-			var p2x = flyRect.width * 0.06, p2y = -flyRect.height * 0.35;
+			var p1x = sx * 0.55, p1y = sy - flyRect.height * 0.7;
+			var p2x = -flyRect.width * 0.15, p2y = flyRect.height * 0.05;
 
 			var STEPS = 45;
 			var frames = [];
