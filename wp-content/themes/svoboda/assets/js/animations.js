@@ -844,8 +844,8 @@
 				sy = flyRect.height * 0.43;
 			}
 
-			var p1x = sx * 0.55, p1y = sy - flyRect.height * 0.7;
-			var p2x = -flyRect.width * 0.15, p2y = flyRect.height * 0.05;
+			var p1x = sx * 0.55, p1y = sy * 0.5;
+			var p2x = sx * 0.15, p2y = sy * 0.15;
 
 			var STEPS = 45;
 			var frames = [];
@@ -858,12 +858,7 @@
 				var dydt = 3 * mt * mt * ( p1y - sy ) + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( 0 - p2y );
 				var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
 				ang = Math.max( -14, Math.min( 14, ang ) ) * ( 1 - t * t * t );
-				// Додаємо легке реалістичне похитування (коливання крил) при гальмуванні в повітрі
-				ang += Math.sin( t * Math.PI * 4.5 ) * 5.5 * Math.pow( mt, 1.5 );
-				
-				// Розрахунок еластичного овершуту для масштабу (Back ease-out)
-				var f = 1 - 2.70158 * mt * mt * mt + 1.70158 * mt * mt;
-				var sc = 0.02 + 0.98 * f;
+				var sc = 0.12 + 0.88 * t;
 				
 				frames.push( {
 					transform: 'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + sc + ')',
