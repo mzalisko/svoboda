@@ -14,18 +14,19 @@ $subtitle = get_sub_field( 'hero_subtitle' ) ?: "Шлях за межі реал
 $quote    = get_sub_field( 'hero_quote' ) ?: "Ми не просто бачимо як події відбуваються з нами. Ми їх створюємо. Своїм внутрішнім станом, думками, вірою.<br><br>Ви дізнаєтеся як підкорити реальність.";
 ?>
 <section class="section section--hero" id="hero">
-	<div class="section--hero__inner">
-		<div class="section--hero__plane-container" aria-hidden="true">
-			<!-- Паперова дірка (вибоїна) -->
-			<div class="section--hero__paper">
-				<img class="section--hero__paper-img" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper.webp' ); ?>" alt="" loading="eager" width="776" height="1540">
-			</div>
-
-			<!-- Літачок -->
-			<div class="section--hero__fly" data-hero-fly>
-				<img src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-plane-fly.png' ); ?>" alt="" loading="eager" width="1802" height="560">
-			</div>
+	<div class="section--hero__plane-container" aria-hidden="true">
+		<!-- Паперова дірка (вибоїна) -->
+		<div class="section--hero__paper">
+			<img class="section--hero__paper-img" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper.webp' ); ?>" alt="" loading="eager" width="776" height="1540">
 		</div>
+
+		<!-- Літачок -->
+		<div class="section--hero__fly" data-hero-fly>
+			<img src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-plane-fly.png' ); ?>" alt="" loading="eager" width="1802" height="560">
+		</div>
+	</div>
+
+	<div class="section--hero__inner">
 
 		<div class="section--hero__heading">
 			<h1 class="section--hero__title">
