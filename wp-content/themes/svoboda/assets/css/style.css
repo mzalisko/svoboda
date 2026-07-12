@@ -354,6 +354,10 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	   padding-top/bottom теж, інакше Hero зсувається вниз на зайвих 96px). */
 	max-width: none;
 	padding: 0;
+	/* overflow:clip обрізає вміст без stacking-context для sticky-позиційованих
+	   дочірніх блоків (хедер не постраждає). Виключає вилазіння літачка/паперу
+	   за межі секції на будь-якому масштабі браузера. */
+	overflow: clip;
 }
 
 .section--hero__inner {
@@ -429,6 +433,7 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	left: -1.5%;
 	top: 26%; /* опущено, щоб не налазило на тайтл/підзаголовок */
 	height: 71%;
+	max-height: 100%; /* не виходити за висоту канви при сильному zoom-out */
 	aspect-ratio: 776 / 1540;
 	z-index: 1;
 	pointer-events: none;
@@ -448,6 +453,7 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	left: 17.72%;
 	top: 40%; /* опущено разом із пробоїною -- не перекриває підзаголовок */
 	width: 48.84%;
+	max-width: 940px; /* максимальний розмір на дуже широких/малих zoom екранах */
 	aspect-ratio: 1802 / 560;
 	z-index: 2;
 	pointer-events: none;
