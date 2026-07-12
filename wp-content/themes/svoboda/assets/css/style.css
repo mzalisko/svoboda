@@ -1528,6 +1528,30 @@ label.variant-row {
    3-колонкова сітка nav-груп (по 3 пункти, довгі українські слова) вже не
    влазить desktop-friendly ~1024-1150px і переносить слова на 2 рядки, тому
    для хедера окремий, ширший брейкпоінт, ніж 768px у Hero/секцій вище. */
+/* --- 17b. Intermediate tablet (993px – 1200px): order pills overflow fix ---
+   На цьому діапазоні ширина колонки з пігулками занадто вузька — ціни не
+   вміщуються в рядок. Переводимо пігулки в колонку і трохи збільшуємо книгу. */
+@media (max-width: 1200px) and (min-width: 993px) {
+	.section--order__inner {
+		gap: clamp(40px, 5vw, 90px);
+	}
+
+	.section--order__pills {
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.order-pill {
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	/* Трохи збільшуємо книгу, щоб компенсувати звільнений простір */
+	.section--order__cover {
+		width: clamp(260px, 30vw, 380px);
+	}
+}
+
 @media (max-width: 1150px) {
 	.site-header__inner {
 		display: flex;
