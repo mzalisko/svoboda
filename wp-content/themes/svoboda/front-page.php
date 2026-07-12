@@ -25,7 +25,7 @@ get_header();
 	// Секції рендеряться по фазах (specs/freedom-landing/2026-07-11-design-match-figma.md).
 	// Ще не доведені до пікселя фази навмисно вимкнені тут (не видалені -- щойно
 	// їхня фаза буде готова, просто додати назву layout'у в цей масив).
-	$enabled_sections = array( 'hero', 'order' );
+	$enabled_sections = array( 'hero', 'order', 'for_you', 'transformation' );
 
 	if ( have_rows( 'page_sections' ) ) :
 		while ( have_rows( 'page_sections' ) ) :

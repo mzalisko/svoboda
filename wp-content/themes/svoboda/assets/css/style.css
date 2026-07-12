@@ -15,7 +15,7 @@
 	--bg-base: #FFFFFF;
 	--accent-red-alt: #ff383c;
 
-	--font-display: "Cormorant Garamond", Georgia, serif;
+	--font-display: "Cormorant Garamond", "Cormorant Garamond Fallback", Georgia, serif;
 	--font-body: "Times New Roman", Times, serif;
 
 	--content-max-width: 1400px;
@@ -23,6 +23,18 @@
 	--section-padding-x: 80px;
 
 	--breakpoint-mobile: 768px;
+}
+
+/* Fallback metric override: наближає геометрію Georgia до Cormorant Garamond
+   (size-adjust стискає fallback до ~92% щоб ширина рядків збігалась),
+   усуваючи стрибок макету при заміні шрифту (Font Layout Shift / CLS). */
+@font-face {
+	font-family: "Cormorant Garamond Fallback";
+	src: local("Georgia");
+	size-adjust: 118%;
+	ascent-override: 85%;
+	descent-override: 22%;
+	line-gap-override: 0%;
 }
 
 @font-face {
