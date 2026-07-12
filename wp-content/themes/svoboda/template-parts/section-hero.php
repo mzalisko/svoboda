@@ -14,31 +14,17 @@ $subtitle = get_sub_field( 'hero_subtitle' ) ?: "Шлях за межі реал
 $quote    = get_sub_field( 'hero_quote' ) ?: "Ми не просто бачимо як події відбуваються з нами. Ми їх створюємо. Своїм внутрішнім станом, думками, вірою.<br><br>Ви дізнаєтеся як підкорити реальність.";
 ?>
 <section class="section section--hero" id="hero">
-	<?php
-	// Пробоїна порізана на 4 радіальні сегменти навколо гирла отвору:
-	// на старті вони стиснуті до центру ("закритий" отвір), у момент пострілу
-	// розгортаються назовні з перельотом і сходяться в піксельний оригінал.
-	?>
-	<div class="section--hero__paper" aria-hidden="true">
-		<img class="section--hero__paper-piece section--hero__paper-piece--tl" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper-tl.png' ); ?>" alt="">
-		<img class="section--hero__paper-piece section--hero__paper-piece--tr" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper-tr.png' ); ?>" alt="">
-		<img class="section--hero__paper-piece section--hero__paper-piece--bl" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper-bl.png' ); ?>" alt="">
-		<img class="section--hero__paper-piece section--hero__paper-piece--br" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper-br.png' ); ?>" alt="">
-	</div>
-
 	<div class="section--hero__inner">
-		<div class="section--hero__fly" data-hero-fly aria-hidden="true">
-			<img src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-plane-fly.png' ); ?>" alt="">
-		</div>
+		<div class="section--hero__plane-container" aria-hidden="true">
+			<!-- Паперова дірка (вибоїна) -->
+			<div class="section--hero__paper">
+				<img class="section--hero__paper-img" src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-paper.webp' ); ?>" alt="" loading="eager" width="776" height="1540">
+			</div>
 
-		<div class="section--hero__plane">
-			<?php // Мобільний стек (<=992px): статичний курований кадр — без шарів/польоту. ?>
-			<img
-				src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-plane-torn-paper.png' ); ?>"
-				alt=""
-				class="section--hero__plane-img"
-				loading="eager"
-			>
+			<!-- Літачок -->
+			<div class="section--hero__fly" data-hero-fly>
+				<img src="<?php echo esc_url( SVOBODA_THEME_URI . '/assets/img/hero-plane-fly.png' ); ?>" alt="" loading="eager" width="1802" height="560">
+			</div>
 		</div>
 
 		<div class="section--hero__heading">

@@ -880,98 +880,12 @@
 			};
 		}
 
-		function update() {
-			ticking = false;
-
-			if ( ! desktopMq.matches || reduceMq.matches ) {
-				fly.style.transform = '';
-				fly.classList.remove( 'is-floating' );
-				if ( anim ) {
-					anim.cancel();
-					anim = null;
-				}
-				return;
-			}
-
-			var scrollY = window.scrollY;
-
-			// Якщо користувач знаходиться на самому верху сторінки і анімація burst-in запущена чи очікується,
-			// ми даємо їй пріоритет.
-			if ( scrollY <= 5 ) {
-				if ( anim ) {
-					// анімація ще відтворюється
-					return;
-				}
-				// Якщо анімації немає, вмикаємо floating
-				fly.style.transform = '';
-				fly.style.opacity = '';
-				fly.classList.add( 'is-floating' );
-				return;
-			}
-
-			// Якщо користувач проскролив вниз більше ніж на 5px
-			if ( anim ) {
-				anim.cancel();
-				anim = null;
-			}
-			fly.classList.remove( 'is-floating' );
-
-			// Траєкторія відльоту літака за межі екрана при скролі
-			var hero = document.getElementById( 'hero' );
-			var heroHeight = hero ? hero.offsetHeight : window.innerHeight;
-			
-			// Прогрес польоту: 0 нагорі -> 1, коли користувач проскролив всю висоту Hero
-			var p = Math.min( 1, Math.max( 0, scrollY / heroHeight ) );
-			var e = easeInOut( p );
-
-			var vw = window.innerWidth;
-			var vh = window.innerHeight;
-
-			// Траєкторія відльоту літака: летить вгору-вправо, повністю залишаючись у Hero секції
-			// і зникаючи дуже швидко, щоб не перетинати нижчі секції (Order тощо)
-			var dx = vw * 0.55;
-			var dy = -vh * 0.08; // Помірний плавний підйом вгору, як на ескізі користувача
-
-			var p1x = dx * 0.25, p1y = dy * 0.20; // Пропорційно до dy, щоб уникнути різкого стрибка вгору
-			var p2x = dx * 0.70, p2y = dy * 0.75;
-
-			var t = e, mt = 1 - t;
-			var bx = 3 * mt * mt * t * p1x + 3 * mt * t * t * p2x + t * t * t * dx;
-			var by = 3 * mt * mt * t * p1y + 3 * mt * t * t * p2y + t * t * t * dy;
-
-			// Розрахунок кута нахилу за дотичною
-			var dxdt = 3 * mt * mt * p1x + 6 * mt * t * ( p2x - p1x ) + 3 * t * t * ( dx - p2x );
-			var dydt = 3 * mt * mt * p1y + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( dy - p2y );
-			var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
-			ang = Math.max( -22, Math.min( 22, ang ) );
-			ang *= Math.min( 1, p * 6 ) * ( 1 - Math.pow( t, 3 ) );
-
-			var scale = 1 - p * 0.4;
-			
-			// Плавне зникнення: повністю згасає до 30% прокрутки Hero
-			var opacity = Math.max( 0, 1 - p / 0.3 );
-
-			fly.style.transform = 'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + scale + ')';
-			fly.style.opacity = String( opacity );
-		}
-
 		// Запускаємо burst, якщо сторінка завантажена на початку
-		if ( window.scrollY <= 5 && desktopMq.matches && ! reduceMq.matches ) {
+		if ( window.scrollY <= 5 && ! reduceMq.matches ) {
 			startBurstAnimation();
 		} else {
-			update();
+			fly.classList.add( 'is-floating' );
 		}
-
-		window.addEventListener( 'scroll', function () {
-			if ( ! ticking ) {
-				ticking = true;
-				window.requestAnimationFrame( update );
-			}
-		}, { passive: true } );
-
-		window.addEventListener( 'resize', function () {
-			update();
-		} );
 	}
 
 	/* ------------------------------------------------------------------ */

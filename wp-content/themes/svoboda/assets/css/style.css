@@ -402,9 +402,12 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
    розміри, не емпіричний підбір. top від'ємний: фото трохи виходить за верх
    canvas (обрізається overflow:hidden секції). */
 /* Мобільний статичний кадр; на десктопі замість нього два шари нижче. */
-.section--hero__plane { display: none; }
-
-
+.section--hero__plane-container {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 1;
+}
 
 /* Шар 1: розрив паперу -- прямий шар СЕКЦІЇ (не канви), тому завжди
    прориває лівий край екрана на будь-якій ширині; опущено і трохи
@@ -419,55 +422,11 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	pointer-events: none;
 }
 
-/* Сегменти пробоїни: геометрія розрізу 62.89% x 42.99% (центр гирла отвору).
-   У стані спокою сходяться в піксельний оригінал зображення. */
-.section--hero__paper-piece {
-	position: absolute;
-	animation-duration: 0.9s;
-	animation-timing-function: cubic-bezier(0.34, 1.45, 0.44, 1); /* пружний переліт */
-	animation-delay: 0.08s;
-	animation-fill-mode: both;
-}
-
-/* Кропи мають перекриття 3px по лініях розрізу -- ховає субпіксельні шви
-   відсоткового позиціонування (однакові пікселі накладаються). */
-.section--hero__paper-piece--tl {
-	left: 0; top: 0; width: 63.2732%; height: 43.1818%;
-	transform-origin: 100% 100%;
-}
-.section--hero__paper-piece--tr {
-	left: 62.5%; top: 0; width: 37.5%; height: 43.1818%;
-	transform-origin: 0 100%;
-}
-.section--hero__paper-piece--bl {
-	left: 0; top: 42.7922%; width: 63.2732%; height: 57.2078%;
-	transform-origin: 100% 0;
-}
-.section--hero__paper-piece--br {
-	left: 62.5%; top: 42.7922%; width: 37.5%; height: 57.2078%;
-	transform-origin: 0 0;
-}
-
-/* "Постріл": сегменти стиснуті до центру -> вибух назовні -> оригінал. */
-@keyframes svoboda-tear-tl {
-	0%   { transform: translate(4%, 4%) rotate(5deg) scale(0.965); }
-	60%  { transform: translate(-1%, -1%) rotate(-1.4deg) scale(1.008); }
-	100% { transform: none; }
-}
-@keyframes svoboda-tear-tr {
-	0%   { transform: translate(-4%, 4%) rotate(-5deg) scale(0.965); }
-	60%  { transform: translate(1%, -1%) rotate(1.4deg) scale(1.008); }
-	100% { transform: none; }
-}
-@keyframes svoboda-tear-bl {
-	0%   { transform: translate(4%, -4%) rotate(-5deg) scale(0.965); }
-	60%  { transform: translate(-1%, 1%) rotate(1.4deg) scale(1.008); }
-	100% { transform: none; }
-}
-@keyframes svoboda-tear-br {
-	0%   { transform: translate(-4%, -4%) rotate(5deg) scale(0.965); }
-	60%  { transform: translate(1%, 1%) rotate(-1.4deg) scale(1.008); }
-	100% { transform: none; }
+.section--hero__paper-img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
 /* Шар 2: літак -- прозорий спрайт у канві (коорд. з композита: left 340/1920,
@@ -1402,40 +1361,54 @@ label.variant-row {
 		width: 100%;
 	}
 
-	/* .section--hero__plane лишається position:relative (НЕ static) --
-	   його дочірній <img> має position:absolute;inset:0 і потребує позиціонованого
-	   батька саме тут, інакше картинка "вилітає" аж до .section--hero (яка й
-	   далі position:relative) і розтягується на всю секцію замість малого боксу.
-	   left:0 обов'язковий: з десктопного правила протікає left:-50px, який у
-	   relative-режимі зсуває бокс і зрізає композицію збоку екрана.
-	   375/209 -- точний розмір фото-фрейму з мобільного Figma-макета
-	   ("375 Fill x 209"); object-position center дає стабільний однаковий кадр
-	   (літачок по центру, розрив паперу біля лівого краю) на будь-якій ширині. */
-	.section--hero__plane {
-		display: flex;
-		justify-content: flex-start;
+	/* Новий мобільний контейнер для пробоїни та літачка.
+	   Запобігає зсувам макета (CLS) та дозволяє незалежне позиціонування шарів. */
+	.section--hero__plane-container {
 		position: relative;
-		left: 0;
-		top: 0;
 		width: 100%;
-		height: auto;
-		overflow: hidden; /* Запобігає появі горизонтального скролу через зсув картинки ліворуч */
+		/* Використовуємо точний аспект макета, щоб зарезервувати місце до завантаження */
+		aspect-ratio: 375 / 215;
+		overflow: hidden;
+		margin-top: 15px;
 	}
 
-	.section--hero__plane-img {
-		position: relative;
-		width: calc(100% + 30px); /* Робить картинку трохи більшою, як у фігмі */
-		max-width: 520px;
-		margin-left: -50px; /* Зсуває картинку ліворуч на 50px */
-		height: auto;
+	.section--hero__paper {
 		display: block;
+		position: absolute;
+		left: -4%;
+		top: 5%;
+		height: 90%;
+		aspect-ratio: 776 / 1540;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	.section--hero__paper-img {
+		display: block;
+		width: 100%;
+		height: 100%;
 		object-fit: contain;
 	}
 
-	/* Шаровий десктопний варіант (папір + політ) на мобільному вимкнено. */
-	.section--hero__paper,
 	.section--hero__fly {
-		display: none;
+		display: block;
+		position: absolute;
+		left: 20%;
+		top: 24%;
+		width: 74%;
+		aspect-ratio: 1802 / 560;
+		z-index: 2;
+		pointer-events: none;
+		will-change: transform;
+		transform-origin: 0 0;
+		opacity: 0; /* Приховуємо до початку анімації вильоту */
+	}
+
+	.section--hero__fly img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
 	}
 
 	/* Картинка (.section--hero__plane) лишається full-bleed (до країв екрана,
@@ -1477,6 +1450,11 @@ label.variant-row {
 		max-width: 72px;
 		max-height: none;
 		height: auto;
+		transform: translateY(30px) scale(0.85); /* Вертикальна анімація знизу вгору замість бокового зсуву */
+	}
+
+	.section--hero__quote-mark.is-visible {
+		transform: translateY(0) scale(1);
 	}
 
 	.section--hero__quote-text {
