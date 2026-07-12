@@ -16,7 +16,7 @@ $presentation_url = get_field( 'business_presentation_url' );
 
 		<?php if ( $photo ) : ?>
 			<div class="section--business__photo">
-				<img src="<?php echo esc_url( $photo['url'] ); ?>" alt="">
+				<img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo esc_url( $photo['url'] ); ?>" alt="<?php echo esc_attr( $photo['alt'] ?? '' ); ?>" width="<?php echo esc_attr( $photo['width'] ?? '' ); ?>" height="<?php echo esc_attr( $photo['height'] ?? '' ); ?>">
 			</div>
 		<?php endif; ?>
 

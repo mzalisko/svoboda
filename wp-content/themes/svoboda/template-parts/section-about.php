@@ -15,7 +15,7 @@ $instagram = get_field( 'author_instagram' );
 	<div class="section--about__inner" data-fade-in data-fade-threshold="0.2">
 		<?php if ( $photo ) : ?>
 			<div class="section--about__photo">
-				<img src="<?php echo esc_url( $photo['url'] ); ?>" alt="<?php echo esc_attr( $photo['alt'] ?? $name ); ?>">
+				<img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo esc_url( $photo['url'] ); ?>" alt="<?php echo esc_attr( $photo['alt'] ?? $name ); ?>" width="<?php echo esc_attr( $photo['width'] ?? '' ); ?>" height="<?php echo esc_attr( $photo['height'] ?? '' ); ?>">
 			</div>
 		<?php endif; ?>
 

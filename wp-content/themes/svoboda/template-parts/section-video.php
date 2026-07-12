@@ -14,7 +14,7 @@ $caption = get_field( 'video_caption' );
 	<div class="section--video__inner" data-fade-in>
 		<div class="section--video__player" data-video-player data-embed-url="<?php echo esc_url( $embed ); ?>">
 			<?php if ( $poster ) : ?>
-				<img class="section--video__poster" src="<?php echo esc_url( $poster['url'] ); ?>" alt="">
+				<img class="section--video__poster lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo esc_url( $poster['url'] ); ?>" alt="<?php echo esc_attr( $poster['alt'] ?? '' ); ?>" width="<?php echo esc_attr( $poster['width'] ?? '' ); ?>" height="<?php echo esc_attr( $poster['height'] ?? '' ); ?>">
 			<?php endif; ?>
 
 			<button type="button" class="section--video__play-btn" aria-label="Відтворити відео" data-video-play-btn>

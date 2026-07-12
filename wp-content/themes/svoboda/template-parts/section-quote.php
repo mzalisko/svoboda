@@ -13,7 +13,7 @@ $sketch = get_field( 'sketch_image' );
 	<div class="section--quote__inner" data-fade-in>
 		<?php if ( $sketch ) : ?>
 			<div class="section--quote__sketch" data-parallax-layer>
-				<img src="<?php echo esc_url( $sketch['url'] ); ?>" alt="">
+				<img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo esc_url( $sketch['url'] ); ?>" alt="<?php echo esc_attr( $sketch['alt'] ?? '' ); ?>" width="<?php echo esc_attr( $sketch['width'] ?? '' ); ?>" height="<?php echo esc_attr( $sketch['height'] ?? '' ); ?>">
 			</div>
 		<?php endif; ?>
 

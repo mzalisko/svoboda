@@ -894,6 +894,20 @@
 	}
 
 	/* ------------------------------------------------------------------ */
+	/* 14. Lazy Loading: Lozad.js                                           */
+	/* ------------------------------------------------------------------ */
+	function initLazyLoading() {
+		if ( typeof lozad === 'function' ) {
+			var observer = lozad( '.lozad', {
+				loaded: function ( el ) {
+					el.classList.add( 'is-loaded' );
+				}
+			} );
+			observer.observe();
+		}
+	}
+
+	/* ------------------------------------------------------------------ */
 	/* Init                                                                 */
 	/* ------------------------------------------------------------------ */
 	function init() {
@@ -911,6 +925,7 @@
 		initOrderModal();
 		initCustomSelects();
 		initHeroPlaneAnimation();
+		initLazyLoading();
 	}
 
 	if ( 'loading' === document.readyState ) {

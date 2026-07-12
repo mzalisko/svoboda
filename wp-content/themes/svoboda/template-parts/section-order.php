@@ -48,7 +48,7 @@ $cover_alt   = $cover ? ( $cover['alt'] ?: 'Обкладинка книги «С
 		</div>
 
 		<div class="section--order__cover" data-fade-in data-fade-threshold="0.15">
-			<img src="<?php echo esc_url( $cover_url ); ?>" alt="<?php echo esc_attr( $cover_alt ); ?>">
+			<img class="lozad" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo esc_url( $cover_url ); ?>" alt="<?php echo esc_attr( $cover_alt ); ?>" width="<?php echo esc_attr( $cover ? $cover['width'] : 1596 ); ?>" height="<?php echo esc_attr( $cover ? $cover['height'] : 2240 ); ?>">
 		</div>
 	</div>
 

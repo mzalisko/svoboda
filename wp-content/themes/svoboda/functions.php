@@ -48,9 +48,17 @@ function svoboda_enqueue_assets() {
 	);
 
 	wp_enqueue_script(
+		'lozad',
+		'https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js',
+		array(),
+		'1.16.0',
+		true
+	);
+
+	wp_enqueue_script(
 		'svoboda-animations',
 		SVOBODA_THEME_URI . '/assets/js/animations.js',
-		array(),
+		array( 'lozad' ),
 		SVOBODA_THEME_VERSION,
 		true
 	);

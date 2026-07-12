@@ -535,6 +535,7 @@ h1, h2, h3, p, blockquote, ul, ol { margin: 0; }
 	   на 1920 і пропорційно масштабується вище/нижче (зум, широкі екрани).
 	   height:auto тримає природну пропорцію SVG (viewBox 128.082x90.9489). */
 	width: min(6.47vw, 124.23px);
+	aspect-ratio: 128.082 / 90.9489;
 	height: auto;
 	flex-shrink: 0;
 	opacity: 0;
@@ -1375,7 +1376,7 @@ label.variant-row {
 	.section--hero__paper {
 		display: block;
 		position: absolute;
-		left: -4%;
+		left: -2%;
 		top: 5%;
 		height: 90%;
 		aspect-ratio: 776 / 1540;
@@ -1448,6 +1449,7 @@ label.variant-row {
 		/* ~57px при 375 (15.5% viewport, виміряно з мобільного референсу). */
 		width: 15.5vw;
 		max-width: 72px;
+		aspect-ratio: 128.082 / 90.9489;
 		max-height: none;
 		height: auto;
 		transform: translateY(30px) scale(0.85); /* Вертикальна анімація знизу вгору замість бокового зсуву */
