@@ -858,8 +858,13 @@
 				var dydt = 3 * mt * mt * ( p1y - sy ) + 6 * mt * t * ( p2y - p1y ) + 3 * t * t * ( 0 - p2y );
 				var ang = Math.atan2( dydt, dxdt ) * 180 / Math.PI;
 				ang = Math.max( -14, Math.min( 14, ang ) ) * ( 1 - t * t * t );
-				// Починаємо з меншого масштабу (0.12 замість 0.3), створюючи ефект вильоту з глибини
-				var sc = 0.12 + 0.88 * t;
+				// Додаємо легке реалістичне похитування (коливання крил) при гальмуванні в повітрі
+				ang += Math.sin( t * Math.PI * 4.5 ) * 5.5 * Math.pow( mt, 1.5 );
+				
+				// Розрахунок еластичного овершуту для масштабу (Back ease-out)
+				var f = 1 - 2.70158 * mt * mt * mt + 1.70158 * mt * mt;
+				var sc = 0.02 + 0.98 * f;
+				
 				frames.push( {
 					transform: 'translate3d(' + bx + 'px,' + by + 'px,0) rotate(' + ang + 'deg) scale(' + sc + ')',
 					opacity: t < 0.08 ? t / 0.08 : 1,
